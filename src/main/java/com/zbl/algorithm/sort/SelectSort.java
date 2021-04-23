@@ -9,7 +9,7 @@ public class SelectSort {
     /**
      * 选择排序
      *
-     * @param arr 待排序的数组，这里使用整形演示算法
+     * @param arr 待排序的数组，这里使用整形数组演示算法
      */
     public static void selectSort(int[] arr) {
         int temp;

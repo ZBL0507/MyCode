@@ -12,7 +12,7 @@ public class BubbleSort {
     /**
      * 冒泡排序v1
      *
-     * @param arr 待排序的数组，这里使用整形演示算法
+     * @param arr 待排序的数组，这里使用整形数组演示算法
      */
     private static void bubbleSortV1(int[] arr) {
         int temp;
@@ -30,7 +30,7 @@ public class BubbleSort {
     /**
      * 冒泡排序v2
      *
-     * @param arr 待排序的数组，这里使用整形演示算法
+     * @param arr 待排序的数组，这里使用整形数组演示算法
      */
     private static void bubbleSortV2(int[] arr) {
         int temp;
