@@ -1,4 +1,4 @@
-package com.zbl;
+package com.zbl.util;
 
 @SuppressWarnings("unused")
 public class ArrayUtils {

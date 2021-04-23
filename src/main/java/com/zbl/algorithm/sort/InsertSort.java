@@ -1,6 +1,6 @@
 package com.zbl.algorithm.sort;
 
-import com.zbl.ArrayUtils;
+import com.zbl.util.ArrayUtils;
 
 public class InsertSort {
     public static void main(String[] args) {
