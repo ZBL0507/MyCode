@@ -16,6 +16,7 @@ public class InsertSort {
      *
      * @param arr 待排序的数组，这里使用整形数组演示算法
      */
+    @SuppressWarnings("all")
     public static void insertSort(int[] arr) {
         int key;
         for (int i = 1; i < arr.length; i++) {
@@ -39,6 +40,7 @@ public class InsertSort {
      *
      * @param arr 待排序的数组，这里使用整形数组演示算法
      */
+    @SuppressWarnings("all")
     public static void insertSortV2(int[] arr) {
         int key;
         int j;

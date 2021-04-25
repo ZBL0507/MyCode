@@ -11,6 +11,7 @@ public class SelectSort {
      *
      * @param arr 待排序的数组，这里使用整形数组演示算法
      */
+    @SuppressWarnings("all")
     public static void selectSort(int[] arr) {
         int temp;
         for (int i = 0; i < arr.length - 1; i++) {
