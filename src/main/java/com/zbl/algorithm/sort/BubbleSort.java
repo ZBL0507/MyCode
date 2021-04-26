@@ -1,7 +1,9 @@
 package com.zbl.algorithm.sort;
 
+
 public class BubbleSort {
     public static void main(String[] args) {
+
         int[] arr1 = {1, 32432, 56, 687, 879, -345, 74, 768};
 
         bubbleSortV1(arr1);
