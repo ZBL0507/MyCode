@@ -1,0 +1,33 @@
+【克隆代码】
+    git clone 远程仓库链接
+
+【新建分支】
+    新建分支
+        git branch 新分支名
+    新建分支并切换之
+        git checkout -b 新分支名
+    切换分支
+        git checkout 分支名
+    切换回刚才的分支
+        git switch -    (git版本过低可能不支持)
+
+【展示分支】
+    展示本地分支
+        git branch
+    展示本地分支及其追踪的远端分支
+        git branch -vv
+    展示所有分支
+        git branch -a
+
+【删除分支】
+    git branch -d 本地分支名1 本地分支名2...             (待删除的本地分支需要具备删除条件方可删除)
+    git branch -D 本地分支名1 本地分支名2...              强行删除本地分支
+    git push origin --delete 远端分支名1 远端分支名2...   删除远端分支
+
+【添加改动点到暂存区】
+    git add 文件路径名
+
+【提交】
+    git commit -m '注释'
+        当 git commit -m '注释' 里面的 注释 写错了的时候  可以使用如下命令进行修补
+    git commit --amend -m '新的注释'    此条命令执行之后错误的注释就被修补为新的注释(注意此命令只可以修补最近的一次提交注释)
