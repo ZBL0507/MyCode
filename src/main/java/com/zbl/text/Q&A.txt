@@ -4,6 +4,7 @@
     c.方法区中的常量引用的对象。 
     d.本地方法栈中的JNI（native方法）引用的对象
 
+
 【redis普通分布式锁存在一定的缺陷】
     [高可用问题]
     客户端1在Redis的master节点上拿到了锁
@@ -37,3 +38,33 @@
     所以这个就是redis cluster，或者是redis master-slave架构的主从异步复制导致的redis分布式锁的最大缺陷：
     在redis master实例宕机的时候，可能导致多个客户端同时完成加锁，
     如果要追求强一致性，那么只能考虑zookeeper分布式锁，当然它们各有自己的优缺点。
+
+
+【JVM参数】
+    是否打印GC收集细节
+        -XX:+PrintGCDetails
+        -XX:-PrintGCDetails
+
+    是否使用串行垃圾回收器
+        -XX:+UseSerialGC
+        -XX:-UseSerialGC
+
+    是否打印出JVM参数
+        -XX:+PrintCommandLineFlags
+        -XX:-PrintCommandLineFlags
+
+    打印出JVM所有参数
+        -XX:+PrintFlagsFinal
+        -XX:-PrintFlagsFinal
+
+    调整堆大小
+        -Xms268435456 等价于 -XX:InitialHeapSize=268435456
+        -Xmx268435456 等价于 -XX:MaxHeapSize=268435456
+
+    配置新生代老年代占比
+        -XX:NewRatio=2  新生代:老年代 1:2 (默认)
+        -XX:NewRatio=4  新生代:老年代 1:4
+
+    配置新生代中eden和from和to的比例
+        -XX:SurvivorRatio=8   eden:from:to=8:1:1 (默认)
+        -XX:SurvivorRatio=4   eden:from:to=4:1:1
