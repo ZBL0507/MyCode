@@ -56,6 +56,9 @@
     打印出JVM所有参数
         -XX:+PrintFlagsFinal
         -XX:-PrintFlagsFinal
+        -XX:+PrintFlagsInitial
+        -XX:-PrintFlagsInitial
+
 
     调整堆大小
         -Xms268435456 等价于 -XX:InitialHeapSize=268435456
@@ -68,3 +71,43 @@
     配置新生代中eden和from和to的比例
         -XX:SurvivorRatio=8   eden:from:to=8:1:1 (默认)
         -XX:SurvivorRatio=4   eden:from:to=4:1:1
+
+
+
+【垃圾收集器种类】
+    串行垃圾回收器：
+        它为单线程环境设计，且只使用一个线程进行垃圾回收，会暂停所有的用户进程，所以不适合服务器环境
+
+    并行垃圾回收器：
+        多个垃圾回收线程并行工作，此时用户线程是暂停的，适用于科学计算/大数据处理后台处理等弱交互场景
+
+    并发垃圾回收器：
+        用户线程和垃圾收集线程同时运行（不一定是并行，可能是交替执行），不需要停顿用户线程，互联网公司多用它，适用于对响应时间有要求的场景
+
+    G1垃圾回收器：
+        G1垃圾回收器将堆内存分割成不同的区域然后并发的对其进行垃圾回收
+
+
+    UseConcMarkSweepGC              -XX:+UseConcMarkSweepGC                -XX:-UseConcMarkSweepGC
+    参数配置：     -XX:+UseConcMarkSweepGC -XX:+PrintCommandLineFlags
+    参数打印出：   -XX:InitialHeapSize=16777216 -XX:MaxHeapSize=268435456 -XX:MaxNewSize=89481216 -XX:MaxTenuringThreshold=6 -XX:OldPLABSize=16 -XX:+PrintCommandLineFlags -XX:+UseConcMarkSweepGC -XX:-UseLargePagesIndividualAllocation -XX:+UseParNewGC
+
+    UseG1GC                         -XX:+UseG1GC                           -XX:-UseG1GC
+    参数配置：     -XX:+UseG1GC -XX:+PrintCommandLineFlags
+    参数打印出     -XX:InitialHeapSize=16777216 -XX:MaxHeapSize=268435456 -XX:+PrintCommandLineFlags -XX:+UseG1GC -XX:-UseLargePagesIndividualAllocation
+
+    UseParNewGC                     -XX:+UseParNewGC                       -XX:-UseParNewGC
+    参数配置：     -XX:+UseParNewGC -XX:+PrintCommandLineFlags
+    参数打印出：   -XX:InitialHeapSize=16777216 -XX:MaxHeapSize=268435456 -XX:+PrintCommandLineFlags -XX:-UseLargePagesIndividualAllocation -XX:+UseParNewGC
+
+    UseParallelGC                   -XX:+UseParallelGC                     -XX:-UseParallelGC
+    参数配置：     -XX:+UseParallelGC -XX:+PrintCommandLineFlags
+    参数打印出：   -XX:InitialHeapSize=16777216 -XX:MaxHeapSize=268435456 -XX:+PrintCommandLineFlags -XX:-UseLargePagesIndividualAllocation -XX:+UseParallelGC
+
+    UseParallelOldGC                -XX:+UseParallelOldGC                  -XX:-UseParallelOldGC
+    参数配置：     -XX:+UseParallelOldGC -XX:+PrintCommandLineFlags
+    参数打印出：   -XX:InitialHeapSize=16777216 -XX:MaxHeapSize=268435456 -XX:+PrintCommandLineFlags -XX:-UseLargePagesIndividualAllocation -XX:+UseParallelOldGC
+
+    UseSerialGC                     -XX:+UseSerialGC                       -XX:-UseSerialGC
+    参数配置：     -XX:+UseSerialGC -XX:+PrintCommandLineFlags
+    参数打印出：   -XX:InitialHeapSize=16777216 -XX:MaxHeapSize=268435456 -XX:+PrintCommandLineFlags -XX:-UseLargePagesIndividualAllocation -XX:+UseSerialGC
