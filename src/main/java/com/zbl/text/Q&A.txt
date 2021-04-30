@@ -40,6 +40,15 @@
     如果要追求强一致性，那么只能考虑zookeeper分布式锁，当然它们各有自己的优缺点。
 
 
+【JVM部分参数说明】
+    DefNew       --------->   Default New Generation
+    Tenured      --------->   Old
+    ParNew       --------->   Parallel New Generation
+    PSYoungGen   --------->   Parallel Scavenge
+    ParOldGen    --------->   Parallel Old Generation
+
+
+
 【JVM参数】
     是否打印GC收集细节
         -XX:+PrintGCDetails
@@ -111,3 +120,65 @@
     UseSerialGC                     -XX:+UseSerialGC                       -XX:-UseSerialGC
     参数配置：     -XX:+UseSerialGC -XX:+PrintCommandLineFlags
     参数打印出：   -XX:InitialHeapSize=16777216 -XX:MaxHeapSize=268435456 -XX:+PrintCommandLineFlags -XX:-UseLargePagesIndividualAllocation -XX:+UseSerialGC
+
+
+【JVM垃圾回收】
+    新生代：
+        - 串行GC(Serial)/(Serial Copying)
+            串行收集器：Serial收集器
+            一句话：一个单线程的收集器，在进行垃圾回收的时候，必须暂停其他工作线程直到它收集结束
+            串行收集器是最古老，最稳定以及效率高的收集器，只使用一个线程去回收但其在进行垃圾回收的过程中可能会产生比较长的停顿(Stop-The-World)状态
+            虽然在收集垃圾的过程中需要暂停所有其他的工作线程，但是它简单高效，对于限定单个CPU环境来说，没有线程相互交互的开销可以获得最高的单线程垃圾收集效率，
+            因此Serial收集器依然是java虚拟机运行在client模式下默认的新生代垃圾收集器
+            对于的JVM参数是：-XX:+UseSerialGC
+            开启后会使用：Serial(Young区用) + Serial Old(Old区用)的收集器组合
+            表示：新生代、老年代都会使用串行垃圾收集器，新生代使用复制算法，老年代使用标记-整理算法
+        - 并行GC(ParNew)
+            一句话：使用多线程进行垃圾回收，在垃圾回收收集时，会Stop-the-World暂停其他所有的工作线程直到它收集结束。
+            ParNew收集器其实就是Serial收集器新生代的并行多线程版本，最常见的应用场景时配合老年代CMS GC工作，其余的行为和Serial收集器完全一样，
+            ParNew垃圾收集器在垃圾收集过程中同样也要暂停所有其他的工作线程。它是很多java虚拟机运行在Server模式下新生代的默认垃圾收集器。
+            常见对应jvm参数：-XX:+UseParNewGC 启动ParNew收集器，只影响新生代的收集，不影响老年代；
+            开启后上述参数后，会使用ParNew(Young区用) + Serial Old的收集器组合，新生代使用复制算法，老年代采用标记--整理算法
+            但是，ParNew+Tenured这样搭配，java8已经不再推荐了。
+            备注：
+                -XX:ParallelGCThreads 限制线程数量，默认开启和CPU数目相同的线程数
+        - 并行回收GC(Parallel)/(Parallel Scavenge)
+            并行收集器Parallel Scavenge收集器类似ParNew， 也是一个新生代垃圾收集器，使用复制算法，也是一个并行的多线程的垃圾收集器，称俗吞吐量优先收集器。
+            一句话：串行收集器在新生代和老年代的并行化
+            它关注的重点是：可控制的吞吐量（ThoughtPut=运行用户代码时间/(运行用户代码时间 + 垃圾收集时间)）。
+                高吞吐量意味着高效利用CPU时间，它多用于在后台运算而不需要太多交互的任务。
+            自适应调节策略也是Parallel Scavenge收集器于ParNew收集器的一个重要区别。（自适应调节策略：虚拟机会根据当前系统的运行情况收集性能监控信息，
+                动态调整这些参数以提供最合适的停顿时间（-XX:MaxGCPauseMillis）或最大的吞吐量）
+            常用JVM参数：-XX:+UseParallelGC 或 -XX:+UseParallelOldGC (可相互激活) 使用Parallel Scavenge收集器
+                        新生代使用复制算法，老年代采用标记--整理算法
+
+    老年代：
+        - 串行回收GC(Serial Old)/(Serial MSC)
+            Serial Old是Serial 垃圾收集器老年代版本，它同样是单线程的收集器，使用标记--整理算法，这个收集器也主要是运行在Clint默认的java虚拟机默认年老代垃圾收集器。
+            在Server模式下，主要有两个途径(了解一下java8以后)
+                1. jdk1.5之前版本中与新生代的Parallel Scavenge收集器搭建配置使用。(Parallel Scavenge+Serial Old)
+                2. 作为老年代版本中使用CMS收集器的后备垃圾收集方案。
+        - 并行GC(Parallel Old)/(Parallel MSC)
+            Parallel Old收集器是Parallel Scavenge的老年代版本，使用多线程的标记--整理算法，Parallel Old收集器在jdk1.6才开始提供。
+            在jdk1.6之前，新生代使用Parallel Scavenge收集器只能搭配老年代的Serial Old收集器，只能保证新生代的吞吐量优先，无法保证整体的吞吐量。在jdk1.6之后(Parallel Scavenge+Serial Old)
+            Parallel Old正是为了在年老代同样提供吞吐量优先的垃圾收集器，如果系统对吞吐量要求比较高，jkd1.8后可以优先考虑新生代Parallel Scavenge和年老代Parallel Old收集器的搭配策略。在jdk1.8k及后(Parallel Scavenge+Parallel Old )
+            JVM常用参数：-XX:+UseParallelOldGC
+                使用Parallel Old收集器，设置该参数后，新生代Parallel+老年代Parallel Old
+        - 并发标记清除GC(CMS)
+            CMS收集器(Concurrent Mark Sweep:并发标记清除)是一种以获取最短的回收停顿时间位目标的收集器。
+            适合应用在互联网或者B/S系统的服务器上，这类应用尤其重视服务器的响应速度，希望系统停顿时间最短。
+            CMS非常适合堆内存大、CPU核数多的服务器端应用，也是G1出现之前大型应用的首选收集器。并发标记清除组合 ParNew + CMS + Serial Old Concurrent Mark Sweep并发标记清除，并发收集低停顿，并发指的是与用户线程一起执行
+            开启该收集器的JVM参数：-XX:+UseConcMarkSweepGC 开启该参数后会自动将-XX:+UseParNewGC 打开
+                开启该参数后，使用ParNew(Young区用)+CMS(Old区用)+Serial Old的收集器组合，Serial Old将作为CMS出错的后备收集器
+            并发标记清除GC(CMS)的执行过程分为4步
+                1. 初始标记(CMS initial mark)
+                2. 并发标记(CMS concurrent mark)和用户线程一起进行GC Roots跟踪的过程，和用户线程一起工作，不需要暂停工作线程。主要标记过程，标记全部对象
+                3. 重新标记(CMS remark)为了修正在并发标记期间，因用户程序继续运行而导致标记产生变动的那一部分的标记记录，仍然需要暂停所有的工作线程。
+                    由于并发标记时，用户线程依然运行，因此在正式清理时，再做修正
+                4. 并发清除(CMS concurrent sweep)和用户线程一起清除GC Roots不可达对象，和用户线程一起工作，不需要暂停工作线程。主要标记结果，直接清理对象
+            并发标记清除GC(CMS)优缺点
+                优点：
+                    并发收集低停顿
+                缺点：
+                    1. 并发执行，对CPU资源压力大
+                    2. 采用的标记清除算法会导致大量碎片
