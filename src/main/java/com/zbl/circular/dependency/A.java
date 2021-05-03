@@ -1,7 +1,6 @@
 package com.zbl.circular.dependency;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,13 +9,17 @@ import org.springframework.stereotype.Component;
  * Is there an unresolvable circular reference?
  */
 @Component
-@Scope("prototype")
+//@Scope("prototype")
 @SuppressWarnings("unused")
 public class A {
 
     @SuppressWarnings("all")
     @Autowired
     private B b;
+
+    public A() {
+        System.out.println("A...A()...");
+    }
 
     /*
      * 切记：构造注入无法解决循环依赖问题，无论是单例还是多例
