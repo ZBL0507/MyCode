@@ -16,6 +16,7 @@ public class BubbleSort {
      *
      * @param arr 待排序的数组，这里使用整形数组演示算法
      */
+    @SuppressWarnings("Duplicates")
     private static void bubbleSortV1(int[] arr) {
         int temp;
         for (int i = 0; i < arr.length - 1; i++) {
@@ -34,6 +35,7 @@ public class BubbleSort {
      *
      * @param arr 待排序的数组，这里使用整形数组演示算法
      */
+    @SuppressWarnings("Duplicates")
     private static void bubbleSortV2(int[] arr) {
         int temp;
         for (int i = 0; i < arr.length - 1; i++) {
