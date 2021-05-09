@@ -24,7 +24,7 @@ package com.zbl.algorithm.leetcode;
  * 来源：力扣（LeetCode）
  * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
  */
-@SuppressWarnings("unused")
+@SuppressWarnings("all")
 public class Test0011 {
     public static void main(String[] args) {
         int[] nums1 = {1, 2, 3, 0, 0, 0};
@@ -32,7 +32,6 @@ public class Test0011 {
         merge(nums1, 3, nums2, 3);
     }
 
-    @SuppressWarnings("all")
     private static void merge(int[] nums1, int m, int[] nums2, int n) {
         int[] temp = new int[m];
         System.arraycopy(nums1, 0, temp, 0, m);
