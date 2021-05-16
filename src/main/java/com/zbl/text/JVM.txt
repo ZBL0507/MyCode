@@ -6,48 +6,12 @@
     e.所有被同步锁持有的对象
 
 
-【redis普通分布式锁存在一定的缺陷】
-    [高可用问题]
-    客户端1在Redis的master节点上拿到了锁
-    Master宕机了，存储锁的key还没有来得及同步到Slave上
-    master故障，发生故障转移，slave节点升级为master节点
-    客户端2从新的Master获取到了对应同一个资源的锁
-    　　于是，客户端1和客户端2同时持有了同一个资源的锁。锁的安全性被打破了。针对这个问题。
-        Redis作者antirez提出了RedLock算法来解决这个问题
-
-    [业务线超时问题]
-    节点1：如果设置锁的过期时间为30MS,但是业务线可能因为网络或者数据量峰值出现导致执行时间超过了30MS，
-           那么这时redis已经把锁给释放了，但是业务线却仍然在执行
-    节点2 这时去获取锁，发现锁可以获取成功，这就造成了 同时有两个节点在执行同一个业务逻辑，
-          则无法保证业务的幂等性（数据加上版本号处理，但仍然会对累加结果造成重复性错误），
-          会造成数据重复处理，或者日志主键ID重复，同一订单两次计算金额，客户两次扣款等问题
-
-    [Redisson]
-    Redisson在这个问题上加上了自动续时，如果锁已经被持有，那么另一个线程试图再次获取锁时，会把已存在的锁重置过期时间，
-    就相当于延长了当前锁的时间从而避免过期造成幂等性问题(采用LUA脚本代码加锁，LUA脚本在redis中具有原子性操作。)
-    watch dog自动延期机制
-    客户端1加锁的锁key默认生存时间才30秒，如果业务执行时间超过了30秒，客户端1还是需要一直持有这把锁，怎么办呢？
-    简单！只要客户端1一旦加锁成功，就会启动一个watch dog看门狗，他是一个后台线程，会每隔10秒检查一下，
-    如果客户端1还持有锁key，那么就会不断的延长锁key的生存时间。
-
-    [Redisson分布式锁的缺点]
-    其实上面那种方案最大的问题，就是如果你对某个redis master实例，写入了myLock这种锁key的value，此时会异步复制给对应的master slave实例。
-    但是这个过程中一旦发生redis master宕机，主备切换，redis slave变为了redis master。
-    接着就会导致，客户端2来尝试加锁的时候，在新的redis master上完成了加锁，而客户端1也以为自己成功加了锁。
-    此时就会导致多个客户端对一个分布式锁完成了加锁。
-    这时系统在业务语义上一定会出现问题，导致各种脏数据的产生。
-    所以这个就是redis cluster，或者是redis master-slave架构的主从异步复制导致的redis分布式锁的最大缺陷：
-    在redis master实例宕机的时候，可能导致多个客户端同时完成加锁，
-    如果要追求强一致性，那么只能考虑zookeeper分布式锁，当然它们各有自己的优缺点。
-
-
 【JVM部分参数说明】
     DefNew       --------->   Default New Generation
     Tenured      --------->   Old
     ParNew       --------->   Parallel New Generation
     PSYoungGen   --------->   Parallel Scavenge
     ParOldGen    --------->   Parallel Old Generation
-
 
 
 【JVM参数】
@@ -81,7 +45,6 @@
     配置新生代中eden和from和to的比例
         -XX:SurvivorRatio=8   eden:from:to=8:1:1 (默认)
         -XX:SurvivorRatio=4   eden:from:to=4:1:1
-
 
 
 【垃圾收集器种类】
@@ -121,7 +84,6 @@
     UseSerialGC                     -XX:+UseSerialGC                       -XX:-UseSerialGC
     参数配置：     -XX:+UseSerialGC -XX:+PrintCommandLineFlags
     参数打印出：   -XX:InitialHeapSize=16777216 -XX:MaxHeapSize=268435456 -XX:+PrintCommandLineFlags -XX:-UseLargePagesIndividualAllocation -XX:+UseSerialGC
-
 
 
 【G1垃圾收集器】
@@ -265,44 +227,3 @@
         -XX:+UseConcMarkSweepGC
         -XX:+UseParNewGC
 
-
-
-【Spring 循环依赖】
-    Spring官网解释
-    Circular dependencies
-    If you use predominantly constructor injection, it is possible to create an unresolvable circular dependency scenario.
-
-    For example: Class A requires an instance of class B through constructor injection,
-    and class B requires an instance of class A through constructor injection.
-    If you configure beans for classes A and B to be injected into each other,
-    the Spring IoC container detects this circular reference at runtime,
-    and throws a BeanCurrentlyInCreationException.
-
-    One possible solution is to edit the source code of some classes to be configured by setters
-    rather than constructors.
-    Alternatively, avoid constructor injection and use setter injection only.
-    In other words, although it is not recommended,
-    you can configure circular dependencies with setter injection.
-
-    Unlike the typical case (with no circular dependencies),
-    a circular dependency between bean A and bean B forces one of the beans to be injected
-    into the other prior to being fully initialized itself (a classic chicken-and-egg scenario).
-
-    三级缓存解决循环依赖：
-        一级缓存：
-        /** Cache of singleton objects: bean name to bean instance. */
-    	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
-
-    	三级缓存：
-    	/** Cache of singleton factories: bean name to ObjectFactory. */
-        private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<>(16);
-
-        二级缓存：
-        /** Cache of early singleton objects: bean name to bean instance. */
-        private final Map<String, Object> earlySingletonObjects = new ConcurrentHashMap<>(16);
-
-    1. A创建过程中需要B， 于是A将自己放到三级缓存里面去， 去实例化B
-    2. B实例化的时候发现需要A， 于是B先查一级缓存，没有，再查二级缓存，还是没有，再查三级缓存，找到了A
-        然后把三级缓存里面的这个A放到二级缓存里面，并删除三级缓存里面的A
-    3. B顺利初始化完毕，将自己放到一级缓存里面去（此时B里面的A依然是创建中状态）
-        然后回来接着创建A，此时B已经创建结束，直接从一级缓存里面拿到B，然后完成创建，并将A自己放到一级缓存里面
