@@ -1,5 +1,8 @@
 package com.zbl.algorithm.sort;
 
+/**
+ * 经典快排无法保证稳定， 如果非要保证稳定，会导致算法空间复杂度上升
+ */
 @SuppressWarnings("all")
 public class QuickSort {
     public static void main(String[] args) {
@@ -33,6 +36,7 @@ public class QuickSort {
 
     /**
      * 快速排序核心步骤，寻找位置（每经过一轮寻找位置操作，会将标志元素放到最终的位置上，并返回这个位置下标）
+     * 此过程会破环稳定性
      *
      * @param arr   给定的数组
      * @param begin 待寻找区间的开始
@@ -47,14 +51,12 @@ public class QuickSort {
         int j = end;
 
         while (i < j) {
-            //这里使用 >= 是为了稳定排序
             while (i < j && arr[j] >= key)
                 j--;
             if (i == j)
                 break;
             arr[i++] = arr[j];
 
-            //这里没有使用 <= 是为了稳定排序
             while (i < j && arr[i] < key)
                 i++;
             arr[j--] = arr[i];
