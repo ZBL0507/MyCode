@@ -15,6 +15,18 @@ public class ArrayUtils {
     }
 
     /**
+     * 打印数组
+     *
+     * @param arr 给定的数组
+     */
+    public static <T> void printArr(final T[] arr) {
+        for (T e : arr) {
+            System.out.print(e + "\t");
+        }
+        System.out.println();
+    }
+
+    /**
      * 对于给定的数组和两个下标，进行两个元素的交换
      *
      * @param arr    给定的数组

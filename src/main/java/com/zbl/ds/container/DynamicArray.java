@@ -1,10 +1,12 @@
 package com.zbl.ds.container;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
  * 动态数组(支持随机访问, 最大容量：Integer.MAX_VALUE)
  */
+@SuppressWarnings("unused")
 public class DynamicArray<T> {
     /**
      * 真正存储元素的数组
@@ -48,11 +50,14 @@ public class DynamicArray<T> {
      *
      * @param length 指定的数组容量
      */
+    @SuppressWarnings("unchecked")
     public DynamicArray(int length) {
         if (length < INIT_CAPACITY) {  //对输入参数进行调整
             length = INIT_CAPACITY;
         }
+        this.array = (T[]) new Object[length];
         this.capacity = length;
+        this.factor = DEFAULT_FACTOR;
     }
 
     /**
@@ -61,13 +66,18 @@ public class DynamicArray<T> {
      * @param length 指定的数组容量
      * @param factor 扩展因子
      */
+    @SuppressWarnings("unchecked")
     public DynamicArray(int length, double factor) {
         if (length < INIT_CAPACITY) {  //对输入参数进行调整
             length = INIT_CAPACITY;
         }
+        array = (T[]) new Object[length];
+        this.capacity = length;
+
         if (factor < DEFAULT_FACTOR) { //对输入参数进行调整
-            this.factor = DEFAULT_FACTOR;
+            factor = DEFAULT_FACTOR;
         }
+        this.factor = factor;
     }
 
     /**
@@ -79,6 +89,39 @@ public class DynamicArray<T> {
         this();
         collection.forEach(this::add);
     }
+
+    /**
+     * 构造函数，将一个普通数组构造成为一个动态数组
+     *
+     * @param arr 给定的普通数组
+     */
+    public DynamicArray(T[] arr) {
+        this();
+        Arrays.stream(arr).forEach(this::add);
+    }
+
+    /**
+     * 构造函数，将一个普通数组构造成为一个动态数组
+     *
+     * @param arr 给定的普通数组
+     */
+    @SuppressWarnings("unchecked")
+    public DynamicArray(int[] arr) {
+        this();
+        Arrays.stream(arr).forEach(e -> this.add((T) new Integer(e)));
+    }
+
+    /**
+     * 构造函数，将一个普通数组构造成为一个动态数组
+     *
+     * @param arr 给定的普通数组
+     */
+    @SuppressWarnings("unchecked")
+    public DynamicArray(long[] arr) {
+        this();
+        Arrays.stream(arr).forEach(e -> this.add((T) new Long(e)));
+    }
+
 
     /**
      * 当前数组元素个数
@@ -109,9 +152,8 @@ public class DynamicArray<T> {
     public String toString() {
         StringBuilder builder = new StringBuilder("[");
         for (int i = 0; i < size; i++) {
-            builder.append(array[i]).append(", ");
+            builder.append(array[i]).append("\t");
         }
-        builder.deleteCharAt(builder.length() - 1);
         builder.deleteCharAt(builder.length() - 1);
         builder.append("]");
         return builder.toString();
@@ -129,6 +171,40 @@ public class DynamicArray<T> {
         }
         array[size++] = value;
         return true;
+    }
+
+    /**
+     * 向动态数组中加入多个元素
+     *
+     * @param values 待加入的多个元素
+     * @return 加入成功返回true，否则返回false
+     */
+    public boolean addAll(T... values) {
+        Arrays.stream(values).forEach(this::add);
+        return true;
+    }
+
+    /**
+     * 向动态数组中加入多个元素
+     *
+     * @param values 待加入的多个元素
+     * @return 加入成功返回true，否则返回false
+     */
+    public boolean addAll(Collection<? extends T> values) {
+        values.forEach(this::add);
+        return true;
+    }
+
+
+    /**
+     * 将动态数组转化为普通数组
+     *
+     * @return 普通数组
+     */
+    public Object[] toArray() {
+        Object[] arr = new Object[size];
+        System.arraycopy(array, 0, arr, 0, arr.length);
+        return arr;
     }
 
 
