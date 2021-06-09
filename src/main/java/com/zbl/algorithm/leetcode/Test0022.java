@@ -1,5 +1,7 @@
 package com.zbl.algorithm.leetcode;
 
+import com.zbl.ds.structure.TreeNode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,22 +40,4 @@ public class Test0022 {
         return null;
     }
 
-    static class TreeNode {
-        int val;
-        Test0021.TreeNode left;
-        Test0021.TreeNode right;
-
-        TreeNode() {
-        }
-
-        TreeNode(int val) {
-            this.val = val;
-        }
-
-        TreeNode(int val, Test0021.TreeNode left, Test0021.TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
-        }
-    }
 }
