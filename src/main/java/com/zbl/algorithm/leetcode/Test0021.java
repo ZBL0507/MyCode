@@ -1,5 +1,7 @@
 package com.zbl.algorithm.leetcode;
 
+import com.zbl.ds.structure.TreeNode;
+
 /**
  * 二叉树的最大深度
  * 给定一个二叉树，找出其最大深度。
@@ -60,25 +62,5 @@ public class Test0021 {
             return 1 + maxDepth(root.left);
         else
             return 1;
-    }
-
-    @SuppressWarnings("unused")
-    static class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode() {
-        }
-
-        TreeNode(int val) {
-            this.val = val;
-        }
-
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
-        }
     }
 }
