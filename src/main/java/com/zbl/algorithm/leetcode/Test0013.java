@@ -41,7 +41,7 @@ import java.util.Stack;
  */
 @SuppressWarnings("unused")
 public class Test0013 {
-    class ListNode {
+    static class ListNode {
         int val;
         ListNode next;
 
@@ -59,7 +59,17 @@ public class Test0013 {
     }
 
     public static void main(String[] args) {
+        ListNode node1 = new ListNode(1);
+        ListNode node2 = new ListNode(2);
+        ListNode node3 = new ListNode(3);
+        ListNode node4 = new ListNode(4);
+        ListNode node5 = new ListNode(5);
+        node4.next = node5;
+        node3.next = node4;
+        node2.next = node3;
+        node1.next = node2;
 
+        ListNode node = reverseList2(node1);
     }
 
     public ListNode reverseList(ListNode head) {
@@ -81,5 +91,26 @@ public class Test0013 {
             }
         }
         return newHead;
+    }
+
+    private static ListNode reverseList2(ListNode head) {
+        if (head == null)
+            return null;
+
+        ListNode result = new ListNode();
+        ListNode[] nodes = new ListNode[1];
+        nodes[0] = result;
+        process(null, head, nodes);
+        return nodes[0];
+    }
+
+    private static void process(ListNode pre, ListNode cur, ListNode[] nodes) {
+        if (null == cur.next) {
+            nodes[0] = cur;
+            nodes[0].next = pre;
+            return;
+        }
+        process(cur, cur.next, nodes);
+        cur.next = pre;
     }
 }
