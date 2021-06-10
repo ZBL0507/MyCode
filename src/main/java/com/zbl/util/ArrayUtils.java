@@ -21,7 +21,7 @@ public class ArrayUtils {
      */
     public static <T> void printArr(final T[] arr) {
         for (T e : arr) {
-            System.out.print(e + "\t");
+            System.out.print(e + "  ");
         }
         System.out.println();
     }
