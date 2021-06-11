@@ -9,11 +9,11 @@ import com.zbl.ds.structure.TreeNode;
  * 说明: 叶子节点是指没有子节点的节点。
  * 示例：
  * 给定二叉树 [3,9,20,null,null,15,7]，
- *   3
- *  / \
+ * 3
+ * / \
  * 9   20
- *    /  \
- *   15   7
+ * /  \
+ * 15   7
  * 返回它的最大深度 3 。
  * <p>
  * 作者：力扣 (LeetCode)
@@ -34,21 +34,22 @@ public class Test0021 {
         tn1.left = tn2;
         tn1.right = tn3;
         int i = maxDepth(tn1);
+        int i2 = maxDepthV2(tn1);
     }
 
     /**
      * Definition for a binary tree node.
      * public class TreeNode {
-     *      int val;
-     *      TreeNode left;
-     *      TreeNode right;
-     *      TreeNode() {}
-     *      TreeNode(int val) { this.val = val; }
-     *      TreeNode(int val, TreeNode left, TreeNode right) {
-     *          this.val = val;
-     *          this.left = left;
-     *          this.right = right;
-     *      }
+     * int val;
+     * TreeNode left;
+     * TreeNode right;
+     * TreeNode() {}
+     * TreeNode(int val) { this.val = val; }
+     * TreeNode(int val, TreeNode left, TreeNode right) {
+     * this.val = val;
+     * this.left = left;
+     * this.right = right;
+     * }
      * }
      */
     private static int maxDepth(TreeNode root) {
@@ -62,5 +63,15 @@ public class Test0021 {
             return 1 + maxDepth(root.left);
         else
             return 1;
+    }
+
+    private static int maxDepthV2(TreeNode root) {
+        if (null == root)
+            return 0;
+
+        int leftDepth = maxDepthV2(root.left);
+        int rightDepth = maxDepthV2(root.right);
+
+        return 1 + Math.max(leftDepth, rightDepth);
     }
 }
