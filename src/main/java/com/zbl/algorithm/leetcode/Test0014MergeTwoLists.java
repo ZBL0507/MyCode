@@ -37,7 +37,7 @@ package com.zbl.algorithm.leetcode;
  * }
  */
 @SuppressWarnings("unused")
-public class Test0014 {
+public class Test0014MergeTwoLists {
     class ListNode {
         int val;
         ListNode next;

@@ -17,7 +17,7 @@ package com.zbl.algorithm.leetcode;
  * 输入: [1,1,1,3,3,4,3,2,4,2]
  * 输出: true
  */
-public class Test0001 {
+public class Test0001ContainsDuplicate {
     public static void main(String[] args) {
         containsDuplicate(new int[]{1, 2, 3, 1});
         containsDuplicate(new int[]{1, 2, 3, 4});

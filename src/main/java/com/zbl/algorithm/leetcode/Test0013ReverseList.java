@@ -40,7 +40,7 @@ import java.util.Stack;
  * }
  */
 @SuppressWarnings("unused")
-public class Test0013 {
+public class Test0013ReverseList {
     static class ListNode {
         int val;
         ListNode next;

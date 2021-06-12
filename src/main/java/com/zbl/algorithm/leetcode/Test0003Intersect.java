@@ -1,7 +1,5 @@
 package com.zbl.algorithm.leetcode;
 
-import java.util.Arrays;
-
 /**
  * 两个数组的交集 II
  * 给定两个数组，编写一个函数来计算它们的交集。
@@ -31,7 +29,7 @@ import java.util.Arrays;
  * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
  */
 @SuppressWarnings("unused")
-public class Test0003 {
+public class Test0003Intersect {
     public static void main(String[] args) {
         int[] nums1 = new int[]{1, 2, 2, 3, 4, 5, 6, 7};
         int[] nums2 = new int[]{2, 3, 4, 8};
