@@ -39,7 +39,7 @@ package com.zbl.algorithm.leetcode;
  * }
  */
 @SuppressWarnings("unused")
-public class Test0012 {
+public class Test0012DeleteNode {
     class ListNode {
         int val;
         ListNode next;

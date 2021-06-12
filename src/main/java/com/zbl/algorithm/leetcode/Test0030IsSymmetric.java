@@ -9,7 +9,7 @@ import java.util.*;
  * 给定一个二叉树，检查它是否是镜像对称的。
  */
 @SuppressWarnings("unused")
-public class Test0030 {
+public class Test0030IsSymmetric {
     @SuppressWarnings("Duplicates")
     public static void main(String[] args) {
         TreeNode treeNode1 = new TreeNode(1);

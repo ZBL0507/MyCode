@@ -10,7 +10,7 @@ import com.zbl.util.ListUtils;
  * 进阶：你能尝试使用一趟扫描实现吗？
  */
 @SuppressWarnings("unused")
-public class Test0025 {
+public class Test0025RemoveNthFromEnd {
     public static void main(String[] args) {
         ListNode listNode6 = new ListNode(6);
         ListNode listNode5 = new ListNode(5, listNode6);

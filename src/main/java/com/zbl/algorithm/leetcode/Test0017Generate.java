@@ -26,7 +26,7 @@ import java.util.List;
  * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
  */
 @SuppressWarnings("unused")
-public class Test0017 {
+public class Test0017Generate {
     public static void main(String[] args) {
         List<List<Integer>> generate = generate(5);
         List<List<Integer>> list = generate(3);
