@@ -222,4 +222,18 @@ public class ForwardList<T> {
         this.tail = node;
         return true;
     }
+
+    /**
+     * 将单向链表转化为一个动态数组
+     *
+     * @return 转化后的动态数组
+     */
+    public DynamicArray<T> toDynamicArray() {
+        DynamicArray<T> dynamicArray = new DynamicArray<>();
+        ForwardListNode<T> p = this.head.next;
+        for (; p != null; p = p.next)
+            dynamicArray.add(p.value);
+
+        return dynamicArray;
+    }
 }
