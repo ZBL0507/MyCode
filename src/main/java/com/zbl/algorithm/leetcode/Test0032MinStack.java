@@ -22,9 +22,9 @@ import java.util.ArrayList;
 @SuppressWarnings("unused")
 public class Test0032MinStack {
 
-    private ArrayList<Integer> eles = null;
+    private ArrayList<Integer> eles;
 
-    private int minValueIndex = -1;
+    private int minValueIndex = 0;
 
     /**
      * initialize your data structure here.
@@ -37,7 +37,8 @@ public class Test0032MinStack {
     @SuppressWarnings("all")
     public void push(int val) {
         eles.add(val);
-        modifyMinValueIndex();
+        if (val < eles.get(minValueIndex))
+            modifyMinValueIndex();
     }
 
     private void modifyMinValueIndex() {
@@ -52,8 +53,10 @@ public class Test0032MinStack {
 
     @SuppressWarnings("all")
     public void pop() {
-        eles.remove(eles.size() - 1);
-        modifyMinValueIndex();
+        Integer minValue = eles.get(minValueIndex);
+        Integer remove = eles.remove(eles.size() - 1);
+        if (remove <= minValue)
+            modifyMinValueIndex();
     }
 
     public int top() {
