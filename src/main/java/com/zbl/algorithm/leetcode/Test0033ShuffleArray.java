@@ -35,11 +35,19 @@ public class Test0033ShuffleArray {
     private int[] arrFrom;
     private int[] arrTo;
     private Random random = new Random();
+    private HashSet<String> arrStrSet = new HashSet<>();
+    //记录所有排列的情况个数
+    private int count = 1;
 
     @SuppressWarnings("all")
     public Test0033ShuffleArray(int[] nums) {
         arrFrom = Arrays.copyOf(nums, nums.length);
         arrTo = nums;
+        if (nums.length > 1) {
+            for (int i = 1; i <= nums.length; i++) {
+                count *= i;
+            }
+        }
     }
 
     /**
@@ -47,7 +55,7 @@ public class Test0033ShuffleArray {
      */
     @SuppressWarnings("all")
     public int[] reset() {
-        return arrTo = arrFrom;
+        return arrFrom;
     }
 
     /**
@@ -56,9 +64,32 @@ public class Test0033ShuffleArray {
     @SuppressWarnings("all")
     public int[] shuffle() {
         int length = arrTo.length;
+        //首次打乱数组
         for (int i = 0; i < length; i++) {
             swap(arrTo, i, random.nextInt(length));
         }
+
+        //将打乱后的数组字符串化
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < arrTo.length; i++) {
+            str.append(arrTo[i]);
+        }
+        //如果打乱后的数组之前已经出现过，则重新打乱直到出现一个之前没有出现过的组合
+        while (arrStrSet.contains(str.toString())) {
+            for (int i = 0; i < length; i++) {
+                swap(arrTo, i, random.nextInt(length));
+            }
+            str.delete(0, str.length());
+            for (int i = 0; i < arrTo.length; i++) {
+                str.append(arrTo[i]);
+            }
+        }
+        //能走到这里，则说明已经出现一个之前没有出现过的组合
+        arrStrSet.add(str.toString());
+        //如果所有组合情况已经出现，则将组合集合清空，进行新一轮
+        if (arrStrSet.size() == count)
+            arrStrSet.clear();
+
         return arrTo;
     }
 
@@ -71,6 +102,9 @@ public class Test0033ShuffleArray {
     public static void main(String[] args) {
         int[] ints = {1, 2, 3};
         Test0033ShuffleArray array = new Test0033ShuffleArray(ints);
+        System.out.println(Arrays.toString(array.shuffle()));
+        System.out.println(Arrays.toString(array.shuffle()));
+        System.out.println(Arrays.toString(array.shuffle()));
         System.out.println(Arrays.toString(array.shuffle()));
         System.out.println(Arrays.toString(array.shuffle()));
         System.out.println(Arrays.toString(array.shuffle()));
