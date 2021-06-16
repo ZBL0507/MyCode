@@ -1,5 +1,6 @@
 package com.zbl.mytest.container;
 
+import com.zbl.ds.container.DynamicArray;
 import com.zbl.ds.container.ForwardList;
 import org.junit.Test;
 
@@ -72,5 +73,17 @@ public class ForwardListTest {
         while (!forwardList.isEmpty())
             System.out.println(forwardList.pop());
         System.out.println(forwardList.isEmpty());
+    }
+
+    @Test
+    public void myTest() {
+        ForwardList<Integer> forwardList = new ForwardList<>();
+        forwardList.insert(12);
+        forwardList.insert(13);
+        forwardList.insert(14);
+        forwardList.insert(15);
+        System.out.println(forwardList);
+        DynamicArray<Integer> array = forwardList.toDynamicArray();
+        System.out.println(array);
     }
 }
