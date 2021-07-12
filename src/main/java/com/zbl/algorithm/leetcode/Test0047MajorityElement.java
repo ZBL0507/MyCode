@@ -1,7 +1,6 @@
 package com.zbl.algorithm.leetcode;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 多数元素
