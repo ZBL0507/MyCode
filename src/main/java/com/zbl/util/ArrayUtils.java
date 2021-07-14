@@ -27,6 +27,18 @@ public class ArrayUtils {
     }
 
     /**
+     * 打印二维数组
+     *
+     * @param arr 给定的数组
+     */
+    public static void printArr(final int[][] arr) {
+        for (int[] e : arr) {
+            printArr(e);
+        }
+        System.out.println();
+    }
+
+    /**
      * 对于给定的数组和两个下标，进行两个元素的交换
      *
      * @param arr    给定的数组
