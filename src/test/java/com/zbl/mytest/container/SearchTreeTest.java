@@ -6,6 +6,8 @@ import com.zbl.ds.structure.TreeNode;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Random;
+
 /**
  * @author zbl
  * @version 1.0
@@ -281,5 +283,54 @@ public class SearchTreeTest {
         searchTree.inorderTreeWalk();
 
         DynamicArray<Integer> array = searchTree.toDynamicArray();
+    }
+
+    @Test
+    public void transPlant() {
+        SearchTree searchTree = new SearchTree();
+        TreeNode treeNode1 = new TreeNode(1);
+        TreeNode treeNode2 = new TreeNode(2);
+        TreeNode treeNode3 = new TreeNode(3);
+
+        treeNode1.right = treeNode2;
+        treeNode2.right = treeNode3;
+
+        treeNode3.parent = treeNode2;
+        treeNode2.parent = treeNode1;
+
+        searchTree.setRoot(treeNode1);
+
+        searchTree.transPlant(treeNode1, null);
+        searchTree.transPlant(treeNode2, treeNode3);
+    }
+
+    @Test
+    public void findNodeByValue() {
+        Random random = new Random();
+        SearchTree searchTree = new SearchTree();
+        for (int i = 0; i < 10; i++) {
+            searchTree.insert(random.nextInt(10));
+        }
+
+        TreeNode nodeByValue4 = searchTree.findNodeByValue(4);
+        TreeNode nodeByValue5 = searchTree.findNodeByValue(5);
+        TreeNode nodeByValue6 = searchTree.findNodeByValue(6);
+
+    }
+
+    @Test
+    public void delete() {
+        SearchTree searchTree = new SearchTree();
+        searchTree.insert(7);
+        searchTree.insert(8);
+        searchTree.insert(9);
+        searchTree.insert(2);
+        searchTree.insert(1);
+        searchTree.insert(5);
+        searchTree.insert(3);
+        searchTree.insert(4);
+
+
+        System.out.println(searchTree.delete(2));
     }
 }
