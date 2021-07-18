@@ -66,8 +66,9 @@ public class RBTree {
      * <p>
      * 左旋的时间复杂度为O(1)
      *
-     * @param x 旋转轴 x-y 中的 x
+     * @param x 旋转轴 x-y(y为x的右) 中的 x
      */
+    @SuppressWarnings("all")
     public void leftRotate(RBTreeNode x) {
         if (x.right == RBTree.LEAF)
             return;
@@ -77,6 +78,8 @@ public class RBTree {
 
         //2. x的右指向y的左
         x.right = y.left;
+        if (y == RBTree.LEAF)
+            return;
 
         //3. 如果y有左(亦即y的左不是{@link RBTree#LEAF}), 则将y的左的父指向x
         if (y.left != RBTree.LEAF)
@@ -98,6 +101,50 @@ public class RBTree {
         y.left = x;
 
         //7. x的父指向y
+        x.parent = y;
+    }
+
+
+    /**
+     * 红黑树操作 - 右旋
+     * 以 x-y 为轴进行右旋
+     * 右旋操作可根据和左旋的对称性得出
+     * <p>
+     * 1. 取x的左为y
+     * 2. x的左指向y的右
+     * 3. y的右(若不是{@link RBTree#LEAF})的父指向x
+     * 4. y的父指向x的父
+     * 5. 如果x是根节点，则将y置为新的根节点；否则如果x是一个左孩子，则x的父的左指向y；否则x的父的右指向y
+     * 6. y的右指向x
+     * 7. x的父指向y
+     * <p>
+     * 右旋的时间复杂度为O(1)
+     *
+     * @param x 旋转轴 x-y(y为x的左) 中的 x
+     */
+    @SuppressWarnings("all")
+    public void rightRotate(RBTreeNode x) {
+        if (x == RBTree.LEAF)
+            return;
+
+        RBTreeNode y = x.left;
+        if (y == RBTree.LEAF)
+            return;
+
+        x.left = y.right;
+        if (y.right != RBTree.LEAF)
+            y.right.parent = x;
+
+        y.parent = x.parent;
+        if (x.parent == RBTree.LEAF) {
+            setRoot(y);
+        } else if (x == x.parent.left) {
+            x.parent.left = y;
+        } else {
+            x.parent.right = y;
+        }
+
+        y.right = x;
         x.parent = y;
     }
 }
