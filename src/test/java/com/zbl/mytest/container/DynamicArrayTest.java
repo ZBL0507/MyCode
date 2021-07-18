@@ -12,7 +12,7 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public class DynamicArrayTest {
     @Test
-    public void add() {
+    public void testAdd() {
         DynamicArray<Integer> dynamicArray = new DynamicArray<>();
         for (int i = 0; i < 25; i++) {
             dynamicArray.add(i);
@@ -25,7 +25,7 @@ public class DynamicArrayTest {
     }
 
     @Test
-    public void add2() {
+    public void testAdd2() {
         DynamicArray<Long> array = new DynamicArray<>(15, 1.2);
         for (long i = 0; i < 30; i++) {
             array.add(i);
@@ -36,7 +36,7 @@ public class DynamicArrayTest {
     }
 
     @Test
-    public void add3() {
+    public void testAdd3() {
         DynamicArray<String> array = new DynamicArray<>(14);
         for (int i = 0; i < 20; i++) {
             array.add(UUID.randomUUID().toString().substring(0, 5));
@@ -48,21 +48,21 @@ public class DynamicArrayTest {
     }
 
     @Test
-    public void add4() {
+    public void testAdd4() {
         List<String> list = Arrays.asList("23", "34", "2345", "sdu");
         DynamicArray<String> array = new DynamicArray<>(list);
         System.out.println(array);
     }
 
     @Test
-    public void add5() {
+    public void testAdd5() {
         long[] longs = {1L, 23L, 4L, 5L, 6L};
         DynamicArray<Object> array = new DynamicArray<>(longs);
         System.out.println(array);
     }
 
     @Test
-    public void add8() {
+    public void testAdd8() {
         Integer[] integers = {12, 2445, 4, 675, 78, 89};
         DynamicArray<Integer> array = new DynamicArray<>(integers);
         System.out.println(array);
@@ -71,7 +71,7 @@ public class DynamicArrayTest {
     }
 
     @Test
-    public void add6() {
+    public void testAdd6() {
         List<String> list = Arrays.asList("23", "34", "2345", "sdu");
         DynamicArray<String> array = new DynamicArray<>();
         array.addAll(list);
@@ -79,7 +79,7 @@ public class DynamicArrayTest {
     }
 
     @Test
-    public void add7() {
+    public void testAdd7() {
         List<String> list = Arrays.asList("23", "34", "2345", "sdu");
         DynamicArray<String> array = new DynamicArray<>();
         System.out.println(array.addAll(list));
@@ -89,7 +89,7 @@ public class DynamicArrayTest {
     }
 
     @Test
-    public void remove() {
+    public void testRemove() {
         DynamicArray<Integer> array = new DynamicArray<>();
         array.addAll(2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
 
@@ -114,7 +114,7 @@ public class DynamicArrayTest {
     }
 
     @Test
-    public void remove2() {
+    public void testRemove2() {
         DynamicArray<String> array = new DynamicArray<>();
         array.addAll("haha", "haha", "haha", "haha", "haha", "haha", "haha", "haha");
         System.out.println("当前数组大小：" + array.size());
@@ -125,7 +125,7 @@ public class DynamicArrayTest {
     }
 
     @Test
-    public void remove3() {
+    public void testRemove3() {
         DynamicArray<CC> array = new DynamicArray<>();
         CC c1 = new CC();
         array.add(c1);
@@ -138,7 +138,7 @@ public class DynamicArrayTest {
     }
 
     @Test
-    public void remove4() {
+    public void testRemove4() {
         DynamicArray<Integer> array = new DynamicArray<>();
         array.addAll(1, 23, 4, 5, 6, 6, 77, 7);
         System.out.println(array);
@@ -150,7 +150,7 @@ public class DynamicArrayTest {
     }
 
     @Test
-    public void remove5() {
+    public void testRemove5() {
         DynamicArray<Integer> array = new DynamicArray<>();
         array.addAll(123, 324, 3465, 4576, 767678, 78989, 345, 456);
         while (array.isNotEmpty())
@@ -158,7 +158,7 @@ public class DynamicArrayTest {
     }
 
     @Test
-    public void remove6() {
+    public void testRemove6() {
         DynamicArray<Integer> array = new DynamicArray<>();
         boolean b = array.addAll(123, 324, 3465, 4576, 767678, 78989, 345, 456);
         System.out.println(b);

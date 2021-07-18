@@ -306,6 +306,79 @@ public class SearchTree {
      * @return 删除成功返回true，失败返回false
      */
     public boolean delete(int value) {
+        //树为空，不做任何处理
+        if (this.root == null)
+            return true;
+
+        TreeNode deleteNode = findNodeByValue(value);
+        //待删除的节点在树中不存在，不做任何处理
+        if (deleteNode == null)
+            return true;
+
+        if (deleteNode.right == null) //待删除的节点没有右孩子
+            transPlant(deleteNode, deleteNode.left);
+        else if (deleteNode.left == null) //待删除的节点没有左孩子
+            transPlant(deleteNode, deleteNode.right);
+        else {
+            //获取待删除节点的后继节点
+            TreeNode successorNode = treeSuccessor(deleteNode);
+            if (successorNode.parent != deleteNode) {
+                transPlant(successorNode, successorNode.right);
+                successorNode.right = deleteNode.right;
+                successorNode.right.parent = successorNode;
+            }
+            transPlant(deleteNode, successorNode);
+            successorNode.left = deleteNode.left;
+            successorNode.left.parent = successorNode;
+        }
+
         return true;
+    }
+
+    /**
+     * 树的替换：用一棵以v为根的子树替换一棵以u为根的子树
+     * 这个方法不是通用的，因为在某些情况下使用有可能会导致一些未定义的错误，例如：调用之后某些指针不能正确的指向，不能正确的断开
+     * 这个方法调用后也有可能会导致搜索树的特性会被破坏
+     * 目前这个方法是配合{@link com.zbl.ds.container.SearchTree#delete(int)}方法使用的
+     *
+     * @param u 被替换的子树根节点
+     * @param v 替换的子树根节点(最后保留下来的子树)
+     */
+    public void transPlant(TreeNode u, TreeNode v) {
+        //如果被替换的这个树是null，则不做任何处理
+        if (u == null)
+            return;
+
+        //如果u是根节点，则v成为新的树
+        if (u.parent == null)
+            this.root = v;
+            //否则，如果u是一个左孩子
+        else if (u.parent.left == u)
+            u.parent.left = v;
+            //否则，u是右孩子
+        else
+            u.parent.right = v;
+
+        //处理v的父指针指向
+        if (v != null)
+            v.parent = u.parent;
+    }
+
+
+    /**
+     * 根据value在搜索树中查找其相对应的节点，找到后返回相应的节点，如果没有找到则返回null
+     *
+     * @param value 指定的值
+     * @return 找到后返回相应的节点，如果没有找到则返回null
+     */
+    public TreeNode findNodeByValue(int value) {
+        TreeNode p = root;
+        while (p != null && p.val != value) {
+            if (value > p.val)
+                p = p.right;
+            if (value < p.val)
+                p = p.left;
+        }
+        return p;
     }
 }
