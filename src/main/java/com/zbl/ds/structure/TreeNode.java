@@ -6,10 +6,13 @@ package com.zbl.ds.structure;
 @SuppressWarnings("unused")
 public class TreeNode {
     public int val;
+
     //左孩子
     public TreeNode left;
+
     //右孩子
     public TreeNode right;
+
     //双亲节点
     public TreeNode parent;
 

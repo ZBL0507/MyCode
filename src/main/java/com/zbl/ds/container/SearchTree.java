@@ -339,7 +339,7 @@ public class SearchTree {
      * 树的替换：用一棵以v为根的子树替换一棵以u为根的子树
      * 这个方法不是通用的，因为在某些情况下使用有可能会导致一些未定义的错误，例如：调用之后某些指针不能正确的指向，不能正确的断开
      * 这个方法调用后也有可能会导致搜索树的特性会被破坏
-     * 目前这个方法是配合com.zbl.ds.container.SearchTree#delete(int)方法使用的
+     * 目前这个方法是配合{@link com.zbl.ds.container.SearchTree#delete(int)}方法使用的
      *
      * @param u 被替换的子树根节点
      * @param v 替换的子树根节点(最后保留下来的子树)
