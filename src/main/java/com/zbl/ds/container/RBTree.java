@@ -27,7 +27,7 @@ public class RBTree {
     /**
      * 哨兵节点(叶子节点)，为了方便和节省空间，所有叶子节点和根的父节点公用这个LEAF节点
      */
-    private static final RBTreeNode LEAF = new RBTreeNode(RBTreeNode.BLACK);
+    public static final RBTreeNode LEAF = new RBTreeNode(RBTreeNode.BLACK);
 
     public RBTreeNode getRoot() {
         return root;

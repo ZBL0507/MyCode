@@ -7,7 +7,7 @@ import org.junit.Test;
 public class ForwardListTest {
 
     @Test
-    public void forwardListTest() {
+    public void testForwardList() {
         ForwardList<Integer> forwardList = new ForwardList<>();
         forwardList.insert(1);
         forwardList.insert(2);
@@ -22,7 +22,7 @@ public class ForwardListTest {
     }
 
     @Test
-    public void forwardListTest2() {
+    public void testForwardList2() {
         Integer[] arr = {1, 2, 4, 5, 6, 7, 8, 9, 90, 0};
         ForwardList<Integer> forwardList = new ForwardList<>(arr);
         System.out.println(forwardList);
@@ -53,7 +53,7 @@ public class ForwardListTest {
     }
 
     @Test
-    public void forwardListTest3() {
+    public void testForwardList3() {
         Integer[] arr = {1, 2, 2, 3, 3, 3, 3, 1, 90, 0};
         ForwardList<Integer> forwardList = new ForwardList<>(arr);
         System.out.println(forwardList);
@@ -66,7 +66,7 @@ public class ForwardListTest {
     }
 
     @Test
-    public void forwardListTest4() {
+    public void testForwardList4() {
         Integer[] arr = {1, 2, 2, 3, 3, 3, 3, 1, 90, 0};
         ForwardList<Integer> forwardList = new ForwardList<>(arr);
         System.out.println(forwardList.isEmpty());
@@ -76,7 +76,7 @@ public class ForwardListTest {
     }
 
     @Test
-    public void myTest() {
+    public void testForwardList5() {
         ForwardList<Integer> forwardList = new ForwardList<>();
         forwardList.insert(12);
         forwardList.insert(13);

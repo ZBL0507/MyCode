@@ -19,7 +19,7 @@ public class SearchTreeTest {
     private TreeNode root;
 
     @Before
-    public void initSearchTree() {
+    public void testInitSearchTree() {
         TreeNode treeNode1 = new TreeNode(1);
         TreeNode treeNode2 = new TreeNode(2);
         TreeNode treeNode3 = new TreeNode(3);
@@ -63,13 +63,13 @@ public class SearchTreeTest {
     }
 
     @Test
-    public void inorderTreeWalk() {
+    public void testInorderTreeWalk() {
         SearchTree searchTree = new SearchTree(root);
         searchTree.inorderTreeWalk();
     }
 
     @Test
-    public void treeMaximum() {
+    public void testTreeMaximum() {
         SearchTree searchTree = new SearchTree();
         searchTree.setRoot(root);
         TreeNode treeNode = searchTree.treeMaximum();
@@ -77,14 +77,14 @@ public class SearchTreeTest {
     }
 
     @Test
-    public void TreeMinimum() {
+    public void testTreeMinimum() {
         SearchTree searchTree = new SearchTree(root);
         TreeNode treeNode = searchTree.TreeMinimum();
         System.out.println(treeNode.val);
     }
 
     @Test
-    public void treeSearch() {
+    public void testTreeSearch() {
         SearchTree searchTree = new SearchTree(root);
         TreeNode treeNode = searchTree.treeSearch(-1);
         if (treeNode == null) {
@@ -95,7 +95,7 @@ public class SearchTreeTest {
     }
 
     @Test
-    public void treeSuccessor() {
+    public void testTreeSuccessor() {
         TreeNode treeNode1 = new TreeNode(1);
         TreeNode treeNode2 = new TreeNode(2);
         TreeNode treeNode3 = new TreeNode(3);
@@ -183,7 +183,7 @@ public class SearchTreeTest {
     }
 
     @Test
-    public void treePreDecessor() {
+    public void testTreePreDecessor() {
         TreeNode treeNode1 = new TreeNode(1);
         TreeNode treeNode2 = new TreeNode(2);
         TreeNode treeNode3 = new TreeNode(3);
@@ -271,7 +271,7 @@ public class SearchTreeTest {
     }
 
     @Test
-    public void insert() {
+    public void testInsert() {
         SearchTree searchTree = new SearchTree();
         searchTree.insert(1);
         searchTree.insert(5);
@@ -286,7 +286,7 @@ public class SearchTreeTest {
     }
 
     @Test
-    public void transPlant() {
+    public void testTransPlant() {
         SearchTree searchTree = new SearchTree();
         TreeNode treeNode1 = new TreeNode(1);
         TreeNode treeNode2 = new TreeNode(2);
@@ -305,7 +305,7 @@ public class SearchTreeTest {
     }
 
     @Test
-    public void findNodeByValue() {
+    public void testFindNodeByValue() {
         Random random = new Random();
         SearchTree searchTree = new SearchTree();
         for (int i = 0; i < 10; i++) {
@@ -319,7 +319,7 @@ public class SearchTreeTest {
     }
 
     @Test
-    public void delete() {
+    public void testDelete() {
         SearchTree searchTree = new SearchTree();
         searchTree.insert(7);
         searchTree.insert(8);
