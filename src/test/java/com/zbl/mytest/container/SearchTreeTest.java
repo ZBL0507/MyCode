@@ -6,6 +6,8 @@ import com.zbl.ds.structure.TreeNode;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Random;
+
 /**
  * @author zbl
  * @version 1.0
@@ -17,7 +19,7 @@ public class SearchTreeTest {
     private TreeNode root;
 
     @Before
-    public void initSearchTree() {
+    public void testInitSearchTree() {
         TreeNode treeNode1 = new TreeNode(1);
         TreeNode treeNode2 = new TreeNode(2);
         TreeNode treeNode3 = new TreeNode(3);
@@ -61,13 +63,13 @@ public class SearchTreeTest {
     }
 
     @Test
-    public void inorderTreeWalk() {
+    public void testInorderTreeWalk() {
         SearchTree searchTree = new SearchTree(root);
         searchTree.inorderTreeWalk();
     }
 
     @Test
-    public void treeMaximum() {
+    public void testTreeMaximum() {
         SearchTree searchTree = new SearchTree();
         searchTree.setRoot(root);
         TreeNode treeNode = searchTree.treeMaximum();
@@ -75,14 +77,14 @@ public class SearchTreeTest {
     }
 
     @Test
-    public void TreeMinimum() {
+    public void testTreeMinimum() {
         SearchTree searchTree = new SearchTree(root);
         TreeNode treeNode = searchTree.TreeMinimum();
         System.out.println(treeNode.val);
     }
 
     @Test
-    public void treeSearch() {
+    public void testTreeSearch() {
         SearchTree searchTree = new SearchTree(root);
         TreeNode treeNode = searchTree.treeSearch(-1);
         if (treeNode == null) {
@@ -93,7 +95,7 @@ public class SearchTreeTest {
     }
 
     @Test
-    public void treeSuccessor() {
+    public void testTreeSuccessor() {
         TreeNode treeNode1 = new TreeNode(1);
         TreeNode treeNode2 = new TreeNode(2);
         TreeNode treeNode3 = new TreeNode(3);
@@ -181,7 +183,7 @@ public class SearchTreeTest {
     }
 
     @Test
-    public void treePreDecessor() {
+    public void testTreePreDecessor() {
         TreeNode treeNode1 = new TreeNode(1);
         TreeNode treeNode2 = new TreeNode(2);
         TreeNode treeNode3 = new TreeNode(3);
@@ -269,7 +271,7 @@ public class SearchTreeTest {
     }
 
     @Test
-    public void insert() {
+    public void testInsert() {
         SearchTree searchTree = new SearchTree();
         searchTree.insert(1);
         searchTree.insert(5);
@@ -281,5 +283,54 @@ public class SearchTreeTest {
         searchTree.inorderTreeWalk();
 
         DynamicArray<Integer> array = searchTree.toDynamicArray();
+    }
+
+    @Test
+    public void testTransPlant() {
+        SearchTree searchTree = new SearchTree();
+        TreeNode treeNode1 = new TreeNode(1);
+        TreeNode treeNode2 = new TreeNode(2);
+        TreeNode treeNode3 = new TreeNode(3);
+
+        treeNode1.right = treeNode2;
+        treeNode2.right = treeNode3;
+
+        treeNode3.parent = treeNode2;
+        treeNode2.parent = treeNode1;
+
+        searchTree.setRoot(treeNode1);
+
+        searchTree.transPlant(treeNode1, null);
+        searchTree.transPlant(treeNode2, treeNode3);
+    }
+
+    @Test
+    public void testFindNodeByValue() {
+        Random random = new Random();
+        SearchTree searchTree = new SearchTree();
+        for (int i = 0; i < 10; i++) {
+            searchTree.insert(random.nextInt(10));
+        }
+
+        TreeNode nodeByValue4 = searchTree.findNodeByValue(4);
+        TreeNode nodeByValue5 = searchTree.findNodeByValue(5);
+        TreeNode nodeByValue6 = searchTree.findNodeByValue(6);
+
+    }
+
+    @Test
+    public void testDelete() {
+        SearchTree searchTree = new SearchTree();
+        searchTree.insert(7);
+        searchTree.insert(8);
+        searchTree.insert(9);
+        searchTree.insert(2);
+        searchTree.insert(1);
+        searchTree.insert(5);
+        searchTree.insert(3);
+        searchTree.insert(4);
+
+
+        System.out.println(searchTree.delete(2));
     }
 }
