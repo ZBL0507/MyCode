@@ -55,6 +55,59 @@ public class RBTree {
 
 
     /**
+     * 获取红黑树中最小的节点
+     *
+     * @return 红黑树中最小的节点
+     */
+    public RBTreeNode minNode() {
+        return minNode(root);
+    }
+
+    /**
+     * 通过给定一个红黑树的根节点，寻找这个子树中最小元素节点
+     *
+     * @param root 给定的红黑树的根节点
+     * @return 这个树中最小元素节点
+     */
+    private RBTreeNode minNode(RBTreeNode root) {
+        if (root == null || root == RBTree.LEAF)
+            return root;
+
+        //寻找整棵树最左边的节点，即为最小元素节点
+        while (root.left != RBTree.LEAF) {
+            root = root.left;
+        }
+        return root;
+    }
+
+    /**
+     * 获取红黑树中最大的节点
+     *
+     * @return 红黑树中最大的节点
+     */
+    public RBTreeNode maxNode() {
+        return maxNode(root);
+    }
+
+    /**
+     * 通过给定一个红黑树的根节点，寻找这个红黑树中最大元素节点
+     *
+     * @param root 给定的红黑树的根节点
+     * @return 这个树中最大元素节点
+     */
+    private RBTreeNode maxNode(RBTreeNode root) {
+        if (root == null || root == RBTree.LEAF)
+            return root;
+
+        //寻找整棵树最右边的节点，即为最大元素节点
+        while (root.right != RBTree.LEAF) {
+            root = root.right;
+        }
+        return root;
+    }
+
+
+    /**
      * 红黑树操作 - 左旋
      * 以 x-y 为轴进行左旋
      * <p>
