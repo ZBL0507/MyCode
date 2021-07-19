@@ -31,6 +31,9 @@ public class RBTreeTest {
 
         rbTree.setRoot(rbTreeNode2);
 
+        System.out.println("最小节点：" + rbTree.minNode().val);
+        System.out.println("最大节点：" + rbTree.maxNode().val);
+
         rbTree.leftRotate(rbTreeNode2);
     }
 
@@ -55,6 +58,8 @@ public class RBTreeTest {
         rbTreeNode3.parent = rbTreeNode2;
 
         rbTree.setRoot(rbTreeNode1);
+        System.out.println("最小节点：" + rbTree.minNode().val);
+        System.out.println("最大节点：" + rbTree.maxNode().val);
 
         rbTree.leftRotate(rbTreeNode1);
     }
@@ -90,6 +95,8 @@ public class RBTreeTest {
 
 
         rbTree.setRoot(rbTreeNode2);
+        System.out.println("最小节点：" + rbTree.minNode().val);
+        System.out.println("最大节点：" + rbTree.maxNode().val);
 
         rbTree.leftRotate(rbTreeNode2);
     }
@@ -130,6 +137,8 @@ public class RBTreeTest {
 
 
         rbTree.setRoot(rbTreeNode6);
+        System.out.println("最小节点：" + rbTree.minNode().val);
+        System.out.println("最大节点：" + rbTree.maxNode().val);
 
         rbTree.leftRotate(rbTreeNode2);
     }
@@ -170,6 +179,8 @@ public class RBTreeTest {
 
 
         rbTree.setRoot(rbTreeNode0);
+        System.out.println("最小节点：" + rbTree.minNode().val);
+        System.out.println("最大节点：" + rbTree.maxNode().val);
 
         rbTree.leftRotate(rbTreeNode2);
     }
@@ -283,6 +294,7 @@ public class RBTreeTest {
         rbTreeNode6.parent = RBTree.LEAF;
 
         rbTree.setRoot(rbTreeNode6);
+        System.out.println("最小节点：" + rbTree.minNode().val);
         rbTree.rightRotate(rbTreeNode4);
     }
 }
