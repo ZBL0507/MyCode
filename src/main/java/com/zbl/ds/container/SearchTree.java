@@ -6,6 +6,8 @@ import com.zbl.ds.structure.TreeNode;
  * 数据结构 - 二叉搜索树
  * 目前此二叉搜索树只支持int类型的数据，不支持其他类型的数据，
  * 里面存放的元素是不能重复的！
+ * <p>
+ * 这个类里面的某些公有方法应该定义为私有的，之所以是公有的是为了方便单元测试
  *
  * @author zbl
  * @version 1.0
@@ -62,8 +64,8 @@ public class SearchTree {
     }
 
 
-    public TreeNode treeSearch(int key) {
-        return treeSearch(root, key);
+    public TreeNode search(int key) {
+        return search(root, key);
     }
 
 
@@ -75,20 +77,20 @@ public class SearchTree {
      * @param key  要查找的关键字
      * @return 找到则返回指向这个节点的引用，否则返回null
      */
-    private TreeNode treeSearch(TreeNode root, int key) {
+    private TreeNode search(TreeNode root, int key) {
         if (root == null || key == root.val)
             return root;
 
         //如果key和根节点相比较，小于则去左子树中寻找
         if (key < root.val)
-            return treeSearch(root.left, key);
+            return search(root.left, key);
 
         //否则，则去右子树中去寻找
-        return treeSearch(root.right, key);
+        return search(root.right, key);
     }
 
-    public TreeNode TreeMinimum() {
-        return treeMinimum(root);
+    public TreeNode minNode() {
+        return minNode(root);
     }
 
     /**
@@ -97,7 +99,7 @@ public class SearchTree {
      * @param root 给定的二叉搜索树的根节点
      * @return 这个树中最小元素节点
      */
-    private TreeNode treeMinimum(TreeNode root) {
+    private TreeNode minNode(TreeNode root) {
         if (root == null)
             return null;
 
@@ -108,8 +110,8 @@ public class SearchTree {
         return root;
     }
 
-    public TreeNode treeMaximum() {
-        return treeMaximum(root);
+    public TreeNode maxNode() {
+        return maxNode(root);
     }
 
     /**
@@ -118,7 +120,7 @@ public class SearchTree {
      * @param root 给定的二叉搜索树的根节点
      * @return 这个树中最大元素节点
      */
-    private TreeNode treeMaximum(TreeNode root) {
+    private TreeNode maxNode(TreeNode root) {
         if (root == null)
             return null;
 
@@ -135,13 +137,13 @@ public class SearchTree {
      * @param treeNode 给定的节点
      * @return 给定节点的后继节点
      */
-    public TreeNode treeSuccessor(TreeNode treeNode) {
+    public TreeNode successor(TreeNode treeNode) {
         if (treeNode == null)
             throw new NullPointerException();
 
         //有右子树的情况下，右子树中最小的节点即为要找的后继节点
         if (treeNode.right != null)
-            return treeMinimum(treeNode.right);
+            return minNode(treeNode.right);
 
         //记录treeNode的父节点
         TreeNode parent = treeNode.parent;
@@ -175,13 +177,13 @@ public class SearchTree {
      * @param treeNode 给定的节点
      * @return 给定节点的前驱节点， 如果有则返回前驱节点，如果没有就返回null
      */
-    public TreeNode treePreDecessor(TreeNode treeNode) {
+    public TreeNode preDecessor(TreeNode treeNode) {
         if (treeNode == null)
             throw new NullPointerException();
 
         //如果有左子树，则左子树中最大的节点即为要找的前驱节点
         if (treeNode.left != null)
-            return treeMaximum(treeNode.left);
+            return maxNode(treeNode.left);
 
         //记录treeNode的父节点
         TreeNode parent = treeNode.parent;
@@ -321,7 +323,7 @@ public class SearchTree {
             transPlant(deleteNode, deleteNode.right);
         else {
             //获取待删除节点的后继节点
-            TreeNode successorNode = treeSuccessor(deleteNode);
+            TreeNode successorNode = successor(deleteNode);
             if (successorNode.parent != deleteNode) {
                 transPlant(successorNode, successorNode.right);
                 successorNode.right = deleteNode.right;

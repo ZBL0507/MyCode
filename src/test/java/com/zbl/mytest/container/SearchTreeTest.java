@@ -72,21 +72,21 @@ public class SearchTreeTest {
     public void testTreeMaximum() {
         SearchTree searchTree = new SearchTree();
         searchTree.setRoot(root);
-        TreeNode treeNode = searchTree.treeMaximum();
+        TreeNode treeNode = searchTree.maxNode();
         System.out.println(treeNode.val);
     }
 
     @Test
     public void testTreeMinimum() {
         SearchTree searchTree = new SearchTree(root);
-        TreeNode treeNode = searchTree.TreeMinimum();
+        TreeNode treeNode = searchTree.minNode();
         System.out.println(treeNode.val);
     }
 
     @Test
     public void testTreeSearch() {
         SearchTree searchTree = new SearchTree(root);
-        TreeNode treeNode = searchTree.treeSearch(-1);
+        TreeNode treeNode = searchTree.search(-1);
         if (treeNode == null) {
             System.out.println("没有找到");
             return;
@@ -139,42 +139,42 @@ public class SearchTreeTest {
 
         SearchTree searchTree = new SearchTree(treeNode5);
 
-        TreeNode successor = searchTree.treeSuccessor(treeNode5);
+        TreeNode successor = searchTree.successor(treeNode5);
         if (successor != null) {
             System.out.println("treeNode5后继:" + successor.val);
         } else {
             System.out.println("treeNode5没有后继");
         }
 
-        TreeNode successor1 = searchTree.treeSuccessor(treeNode1);
+        TreeNode successor1 = searchTree.successor(treeNode1);
         if (successor1 != null) {
             System.out.println("treeNode1后继:" + successor1.val);
         } else {
             System.out.println("treeNode1没有后继");
         }
 
-        TreeNode successor3 = searchTree.treeSuccessor(treeNode3);
+        TreeNode successor3 = searchTree.successor(treeNode3);
         if (successor3 != null) {
             System.out.println("treeNode3后继:" + successor3.val);
         } else {
             System.out.println("treeNode3没有后继");
         }
 
-        TreeNode successor4 = searchTree.treeSuccessor(treeNode4);
+        TreeNode successor4 = searchTree.successor(treeNode4);
         if (successor4 != null) {
             System.out.println("treeNode4后继:" + successor4.val);
         } else {
             System.out.println("treeNode4没有后继");
         }
 
-        TreeNode successor11 = searchTree.treeSuccessor(treeNode11);
+        TreeNode successor11 = searchTree.successor(treeNode11);
         if (successor11 != null) {
             System.out.println("treeNode11后继:" + successor11.val);
         } else {
             System.out.println("treeNode11没有后继");
         }
 
-        TreeNode successor6 = searchTree.treeSuccessor(treeNode6);
+        TreeNode successor6 = searchTree.successor(treeNode6);
         if (successor6 != null) {
             System.out.println("treeNode6后继:" + successor6.val);
         } else {
@@ -227,42 +227,42 @@ public class SearchTreeTest {
 
         SearchTree searchTree = new SearchTree(treeNode5);
 
-        TreeNode treeNode = searchTree.treePreDecessor(treeNode5);
+        TreeNode treeNode = searchTree.preDecessor(treeNode5);
         if (treeNode != null) {
             System.out.println("5的前驱是：" + treeNode.val);
         } else {
             System.out.println("5没有前驱。。。");
         }
 
-        TreeNode treeNode4444 = searchTree.treePreDecessor(treeNode4);
+        TreeNode treeNode4444 = searchTree.preDecessor(treeNode4);
         if (treeNode4444 != null) {
             System.out.println("4的前驱是：" + treeNode4444.val);
         } else {
             System.out.println("4没有前驱....");
         }
 
-        TreeNode treeNode1111 = searchTree.treePreDecessor(treeNode1);
+        TreeNode treeNode1111 = searchTree.preDecessor(treeNode1);
         if (treeNode1111 != null) {
             System.out.println("1的前驱是：" + treeNode1111.val);
         } else {
             System.out.println("1没有前驱....");
         }
 
-        TreeNode treeNode6666 = searchTree.treePreDecessor(treeNode6);
+        TreeNode treeNode6666 = searchTree.preDecessor(treeNode6);
         if (treeNode6666 != null) {
             System.out.println("6的前驱是：" + treeNode6666.val);
         } else {
             System.out.println("6没有前驱....");
         }
 
-        TreeNode treeNode8888 = searchTree.treePreDecessor(treeNode8);
+        TreeNode treeNode8888 = searchTree.preDecessor(treeNode8);
         if (treeNode8888 != null) {
             System.out.println("8的前驱是：" + treeNode8888.val);
         } else {
             System.out.println("8没有前驱....");
         }
 
-        TreeNode treeNode818188 = searchTree.treePreDecessor(treeNode10);
+        TreeNode treeNode818188 = searchTree.preDecessor(treeNode10);
         if (treeNode818188 != null) {
             System.out.println("10的前驱是：" + treeNode818188.val);
         } else {
