@@ -13,6 +13,8 @@ import com.zbl.ds.structure.RBTreeNode;
  * 3. 每个叶子节点(NULL)是黑色的
  * 4. 如果一个节点是红色的，那么它的两个孩子都是黑色的
  * 5. 对于每个节点，从该节点到其所有后代叶子节点的简单路径上，均包含相同数目的黑色节点
+ * <p>
+ * 这个类里面的某些公有方法应该定义为私有的，之所以是公有的是为了方便单元测试
  *
  * @author zbl
  * @version 1.0
@@ -49,6 +51,59 @@ public class RBTree {
      */
     public RBTree(RBTreeNode root) {
         this.root = root;
+    }
+
+
+    /**
+     * 获取红黑树中最小的节点
+     *
+     * @return 红黑树中最小的节点
+     */
+    public RBTreeNode minNode() {
+        return minNode(root);
+    }
+
+    /**
+     * 通过给定一个红黑树的根节点，寻找这个子树中最小元素节点
+     *
+     * @param root 给定的红黑树的根节点
+     * @return 这个树中最小元素节点
+     */
+    private RBTreeNode minNode(RBTreeNode root) {
+        if (root == null || root == RBTree.LEAF)
+            return root;
+
+        //寻找整棵树最左边的节点，即为最小元素节点
+        while (root.left != RBTree.LEAF) {
+            root = root.left;
+        }
+        return root;
+    }
+
+    /**
+     * 获取红黑树中最大的节点
+     *
+     * @return 红黑树中最大的节点
+     */
+    public RBTreeNode maxNode() {
+        return maxNode(root);
+    }
+
+    /**
+     * 通过给定一个红黑树的根节点，寻找这个红黑树中最大元素节点
+     *
+     * @param root 给定的红黑树的根节点
+     * @return 这个树中最大元素节点
+     */
+    private RBTreeNode maxNode(RBTreeNode root) {
+        if (root == null || root == RBTree.LEAF)
+            return root;
+
+        //寻找整棵树最右边的节点，即为最大元素节点
+        while (root.right != RBTree.LEAF) {
+            root = root.right;
+        }
+        return root;
     }
 
 
