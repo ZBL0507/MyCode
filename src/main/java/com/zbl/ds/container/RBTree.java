@@ -202,4 +202,52 @@ public class RBTree {
         y.right = x;
         x.parent = y;
     }
+
+    /**
+     * 红黑树的中序遍历
+     */
+    public void inorderTreeWalk() {
+        inorderTreeWalk(root);
+        System.out.println();
+    }
+
+    /**
+     * 根据给定的根节点中序遍历 红黑树
+     *
+     * @param root 给定的根节点
+     */
+    private void inorderTreeWalk(RBTreeNode root) {
+        if (root != RBTree.LEAF) {
+            inorderTreeWalk(root.left);
+            System.out.print(root.val + "  ");
+            inorderTreeWalk(root.right);
+        }
+    }
+
+    public RBTreeNode search(int key) {
+        return search(root, key);
+    }
+
+
+    /**
+     * 在一棵红黑树中查找一个具有给定关键字的节点，输入一个树的根节点和一个关键字key
+     * 如果找到则返回指向这个节点的引用，否则返回null
+     *
+     * @param root 指定的树根节点
+     * @param key  要查找的关键字
+     * @return 找到则返回指向这个节点的引用，否则返回null
+     */
+    private RBTreeNode search(RBTreeNode root, int key) {
+        if (root == null || root == RBTree.LEAF)
+            return null;
+        if (key == root.val)
+            return root;
+
+        //如果key和根节点相比较，小于则去左子树中寻找
+        if (key < root.val)
+            return search(root.left, key);
+
+        //否则，则去右子树中去寻找
+        return search(root.right, key);
+    }
 }
