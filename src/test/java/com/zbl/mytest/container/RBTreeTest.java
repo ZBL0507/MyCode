@@ -9,6 +9,7 @@ import org.junit.Test;
  * @version 1.0
  * @since 2021/7/18 16:27
  */
+@SuppressWarnings("unused")
 public class RBTreeTest {
     @Test
     public void testLeftRotate() {
@@ -30,6 +31,8 @@ public class RBTreeTest {
         rbTreeNode2.parent = RBTree.LEAF;
 
         rbTree.setRoot(rbTreeNode2);
+
+        rbTree.inorderTreeWalk();
 
         System.out.println("最小节点：" + rbTree.minNode().val);
         System.out.println("最大节点：" + rbTree.maxNode().val);
@@ -58,6 +61,8 @@ public class RBTreeTest {
         rbTreeNode3.parent = rbTreeNode2;
 
         rbTree.setRoot(rbTreeNode1);
+
+        rbTree.inorderTreeWalk();
         System.out.println("最小节点：" + rbTree.minNode().val);
         System.out.println("最大节点：" + rbTree.maxNode().val);
 
@@ -95,6 +100,7 @@ public class RBTreeTest {
 
 
         rbTree.setRoot(rbTreeNode2);
+        rbTree.inorderTreeWalk();
         System.out.println("最小节点：" + rbTree.minNode().val);
         System.out.println("最大节点：" + rbTree.maxNode().val);
 
@@ -137,6 +143,7 @@ public class RBTreeTest {
 
 
         rbTree.setRoot(rbTreeNode6);
+        rbTree.inorderTreeWalk();
         System.out.println("最小节点：" + rbTree.minNode().val);
         System.out.println("最大节点：" + rbTree.maxNode().val);
 
@@ -179,6 +186,12 @@ public class RBTreeTest {
 
 
         rbTree.setRoot(rbTreeNode0);
+
+        RBTreeNode searchResult1 = rbTree.search(0);
+        RBTreeNode searchResult2 = rbTree.search(2);
+        RBTreeNode searchResult3 = rbTree.search(-1);
+
+        rbTree.inorderTreeWalk();
         System.out.println("最小节点：" + rbTree.minNode().val);
         System.out.println("最大节点：" + rbTree.maxNode().val);
 
