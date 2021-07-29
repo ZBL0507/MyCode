@@ -1,3 +1,27 @@
+【redis实现分布式锁】
+    [使用哪个命令来实现分布式锁？]
+        SET key value [EX seconds|PX milliseconds|EXAT timestamp|PXAT milliseconds-timestamp|KEEPTTL] [NX|XX] [GET]
+    [redis实现分布式锁要点(来自redis官网)]
+        Distributed locks are a very useful primitive in many environments where different processes must operate with
+            shared resources in a mutually exclusive way.
+        There are a number of libraries and blog posts describing how to implement a DLM (Distributed Lock Manager) with Redis,
+            but every library uses a different approach,
+            and many use a simple approach with lower guarantees compared to what can be achieved with slightly more complex designs.
+        This page is an attempt to provide a more canonical algorithm to implement distributed locks with Redis.
+            We propose an algorithm, called Redlock, which implements a DLM which we believe to be safer than the vanilla single instance approach.
+            We hope that the community will analyze it, provide feedback,
+            and use it as a starting point for the implementations or more complex or alternative designs.
+
+        - Safety and Liveness guarantees
+            We are going to model our design with just three properties that, from our point of view,
+                are the minimum guarantees needed to use distributed locks in an effective way.
+            1. Safety property: Mutual exclusion. At any given moment, only one client can hold a lock.
+            2. Liveness property A: Deadlock free. Eventually it is always possible to acquire a lock,
+                                    even if the client that locked a resource crashes or gets partitioned.
+            3. Liveness property B: Fault tolerance. As long as the majority of Redis nodes are up,
+                                    clients are able to acquire and release locks.
+
+
 【redis普通分布式锁存在一定的缺陷】
     [高可用问题]
     客户端1在Redis的master节点上拿到了锁
@@ -107,4 +131,17 @@
     更新缓存相对于删除缓存，还有两点劣势：
     - 如果你写入的缓存值，是经过复杂计算才得到的话。更新缓存频率高的话，就浪费性能啦。
     - 在写数据库场景多，读数据场景少的情况下，数据很多时候还没被读取到，又被更新了，这也浪费了性能呢(实际上，写多的场景，用缓存也不是很划算的,哈哈)
+
+
+
+【redis的zset是如何实现的?为什么使用跳跃表而不使用其他的数据结构】
+
+
+【redis的持久化方式】
+
+
+【redis的集群方式，各有什么特点】
+
+
+【redis cluster 的通信机制，说一下蜂巢】
 
