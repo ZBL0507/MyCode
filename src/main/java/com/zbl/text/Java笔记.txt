@@ -71,3 +71,53 @@
                  例如线程B在等待等待线程A释放锁，但是线程B由于等待时间太久，可以主动中断等待锁。
         公平锁：公平锁是指尽量以线程的等待时间先后顺序获取锁，等待时间最久的线程优先获取锁。
                 synchronized隐性锁是非公平锁，它无法保证等待的线程获取锁的顺序，ReentrantLook可以自己控制是否公平锁。
+
+
+【AQS】
+    AbstractQueuedSynchronizer
+    lock 锁重入的原理如下：
+        final boolean nonfairTryAcquire(int acquires) {
+            final Thread current = Thread.currentThread();
+            int c = getState();
+            if (c == 0) {   // c等于0代表别的线程来竞争获取锁
+                if (compareAndSetState(0, acquires)) {
+                    setExclusiveOwnerThread(current);
+                    return true;
+                }
+            }
+            else if (current == getExclusiveOwnerThread()) {  // c不等于0 判断是否是持有锁的线程再次获取锁，如果是则重入
+                int nextc = c + acquires;   // 重入次数
+                if (nextc < 0) // overflow
+                    throw new Error("Maximum lock count exceeded");
+                setState(nextc);   // 设置重入次数
+                return true;
+            }
+            return false;
+        }
+
+    释放锁：
+        protected final boolean tryRelease(int releases) {
+            int c = getState() - releases;
+            if (Thread.currentThread() != getExclusiveOwnerThread())
+                throw new IllegalMonitorStateException();
+            boolean free = false;
+            if (c == 0) {
+                free = true;
+                setExclusiveOwnerThread(null);
+            }
+            setState(c);
+            return free;
+        }
+
+        public final boolean release(int arg) {
+            if (tryRelease(arg)) {
+                Node h = head;
+                if (h != null && h.waitStatus != 0)
+                    unparkSuccessor(h); // 唤醒一个阻塞的线程
+                return true;
+            }
+            return false;
+        }
+
+    AQS中存放阻塞线程的Node为双向链表
+
