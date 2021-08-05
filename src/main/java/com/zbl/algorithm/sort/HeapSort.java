@@ -31,7 +31,7 @@ public class HeapSort {
             heapSort(sourceArr);
             Arrays.sort(targetArr);
             if (!ArrayUtils.compare(sourceArr, targetArr)) {
-                System.out.println("=============================第"+ (i + 1) +"检测出错误=============================");
+                System.out.println("=============================第" + (i + 1) + "检测出错误=============================");
                 System.out.println("sourceArr:");
                 ArrayUtils.printArr(sourceArr);
                 System.out.println("targetArr");

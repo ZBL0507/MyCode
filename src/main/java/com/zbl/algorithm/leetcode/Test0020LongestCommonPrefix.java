@@ -4,17 +4,17 @@ import java.util.ArrayList;
 
 /**
  * 编写一个函数来查找字符串数组中的最长公共前缀。
- *
+ * <p>
  * 如果不存在公共前缀，返回空字符串 ""。
  * 示例 1：
  * 输入：strs = ["flower","flow","flight"]
  * 输出："fl"
- *
+ * <p>
  * 示例 2：
  * 输入：strs = ["dog","racecar","car"]
  * 输出：""
  * 解释：输入不存在公共前缀。
- *
+ * <p>
  * 作者：力扣 (LeetCode)
  * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnmav1/
  * 来源：力扣（LeetCode）
@@ -23,9 +23,9 @@ import java.util.ArrayList;
 @SuppressWarnings("unused")
 public class Test0020LongestCommonPrefix {
     public static void main(String[] args) {
-        String[] strs = {"flower","flow","flight"};
+        String[] strs = {"flower", "flow", "flight"};
         String s = longestCommonPrefix(strs);
-        String[] strs2 = {"dog","racecar","car"};
+        String[] strs2 = {"dog", "racecar", "car"};
         String s1 = longestCommonPrefix(strs2);
     }
 
@@ -41,7 +41,8 @@ public class Test0020LongestCommonPrefix {
         }
 
         StringBuilder result = new StringBuilder();
-        T1:for (int i = 0; i < minIndex; i++) {
+        T1:
+        for (int i = 0; i < minIndex; i++) {
             for (int j = 0; j < list.size() - 1; j++) {
                 if (list.get(j)[i] != list.get(j + 1)[i])
                     break T1;

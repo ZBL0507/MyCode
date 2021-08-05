@@ -45,7 +45,8 @@ class Philosopher extends Thread {
     }
 }
 
-class Chopstick { }
+class Chopstick {
+}
 
 /*
   jstack 进程号
