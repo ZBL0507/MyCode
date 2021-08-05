@@ -56,6 +56,44 @@
     在redis master实例宕机的时候，可能导致多个客户端同时完成加锁，
     如果要追求强一致性，那么只能考虑zookeeper分布式锁，当然它们各有自己的优缺点。
 
+    [Redisson分布式锁的一些原理]
+    获取锁：
+          <T> RFuture<T> tryLockInnerAsync(long waitTime, long leaseTime, TimeUnit unit, long threadId, RedisStrictCommand<T> command) {
+                return evalWriteAsync(getRawName(), LongCodec.INSTANCE, command,
+                        "if (redis.call('exists', KEYS[1]) == 0) then " +   //判断key是否存在，如果不存在直接获取锁
+                                "redis.call('hincrby', KEYS[1], ARGV[2], 1); " +   //当前线程首次获取锁
+                                "redis.call('pexpire', KEYS[1], ARGV[1]); " +    //设置过期时间
+                                "return nil; " +
+                                "end; " +
+                                "if (redis.call('hexists', KEYS[1], ARGV[2]) == 1) then " +  //key存在，并且是持有锁的线程再次获取锁
+                                "redis.call('hincrby', KEYS[1], ARGV[2], 1); " +    //重入标记+1
+                                "redis.call('pexpire', KEYS[1], ARGV[1]); " +    //设置过期时间
+                                "return nil; " +
+                                "end; " +
+                                "return redis.call('pttl', KEYS[1]);",
+                        Collections.singletonList(getRawName()), unit.toMillis(leaseTime), getLockName(threadId));
+          }
+
+    释放锁：
+        protected RFuture<Boolean> unlockInnerAsync(long threadId) {
+            return evalWriteAsync(getRawName(), LongCodec.INSTANCE, RedisCommands.EVAL_BOOLEAN,
+                    "if (redis.call('hexists', KEYS[1], ARGV[3]) == 0) then " +  //如果key不存在了，直接返回
+                            "return nil;" +
+                            "end; " +
+                            "local counter = redis.call('hincrby', KEYS[1], ARGV[3], -1); " +  //key还存在，重入次数减一
+                            "if (counter > 0) then " +
+                            "redis.call('pexpire', KEYS[1], ARGV[2]); " +  //如果重入次数还大于0，重新设置过期时间
+                            "return 0; " +
+                            "else " +
+                            "redis.call('del', KEYS[1]); " +   //如果重入次数等于0，直接删除key
+                            "redis.call('publish', KEYS[2], ARGV[1]); " +
+                            "return 1; " +
+                            "end; " +
+                            "return nil;",
+                    Arrays.asList(getRawName(), getChannelName()), LockPubSub.UNLOCK_MESSAGE, internalLockLeaseTime, getLockName(threadId));
+        }
+
+
 
 //https://blog.csdn.net/womenyiqilalala/article/details/105205532
 【缓存雪崩】
