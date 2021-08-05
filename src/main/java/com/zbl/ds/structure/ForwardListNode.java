@@ -2,6 +2,7 @@ package com.zbl.ds.structure;
 
 /**
  * 单向节点： A -> B -> C -> D
+ *
  * @param <T> 泛型
  */
 @SuppressWarnings("unused")

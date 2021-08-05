@@ -34,7 +34,6 @@ public class Test0023IsPalindrome {
         boolean palindrome = isPalindrome(listNode1);
 
 
-
     }
 
     private static boolean isPalindrome(ListNode head) {
