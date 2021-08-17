@@ -1,3 +1,8 @@
+【MySQL两个时间字段】
+    gmt_created    timestamp   default CURRENT_TIMESTAMP not null comment '创建时间',
+    gmt_modify     timestamp   default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '最后修改时间',
+
+
 【索引失效情况】
     - 不同的字符集进行比较前需要进行转换会造成索引失效
 
