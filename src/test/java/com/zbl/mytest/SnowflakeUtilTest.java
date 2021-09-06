@@ -19,6 +19,7 @@ public class SnowflakeUtilTest {
         for (long i = 0; i < count; i++) {
             long nextId = SNOWFLAKE.nextId();
             String to64Radix = SnowflakeUtil.to64Radix(nextId);
+//            System.out.println("to64Radix:" + to64Radix);
             long toLong = SnowflakeUtil.toLong(to64Radix);
             if (nextId != toLong) {
                 throw new RuntimeException("test fail " +
@@ -41,7 +42,8 @@ public class SnowflakeUtilTest {
 
     @Test
     public void myTest003() {
-        long nextId = SNOWFLAKE.nextId();
+//        long nextId = SNOWFLAKE.nextId();
+        long nextId = Long.MAX_VALUE;
         System.out.println("nextId: " + nextId);
         String to64Radix = SnowflakeUtil.to64Radix(nextId);
         System.out.println("to64Radix: " + to64Radix);
