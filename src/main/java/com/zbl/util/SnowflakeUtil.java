@@ -14,7 +14,7 @@ public class SnowflakeUtil {
      * '0' ~ '9' --> 0 ~ 9
      * 'A' ~ 'Z' --> 10 ~ 35
      * 'a' ~ 'z' --> 36 ~ 61
-     * '$','#'   --> 62,63
+     * '_','-'   --> 62,63
      */
     private final static Character[] digits = {
             '0', '1', '2', '3', '4', '5',
@@ -29,7 +29,7 @@ public class SnowflakeUtil {
             'm', 'n', 'o', 'p', 'q', 'r',
             's', 't', 'u', 'v', 'w', 'x',
             'y', 'z',
-            '$', '#'
+            '_', '-'
     };
 
     /**
