@@ -39,8 +39,36 @@ public class Test0067LengthOfLIS {
     public static void main(String[] args) {
         int[] nums = {1, 3, 6, 7, 9, 4, 10, 5, 6};
         int i = lengthOfLIS(nums);
+        int i3 = lengthOfLISV2(nums);
         int i1 = lengthOfLIS(new int[]{0, 1, 0, 3, 2, 3});
         int i2 = lengthOfLIS(new int[]{7, 7, 7, 7, 7, 7, 7});
+    }
+
+    //v2版本 还是错误！！！
+    private static int lengthOfLISV2(int[] nums) {
+        //用于记录结果
+        int cnt = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums.length - i < cnt)
+                break;
+
+            int count = 1;
+            int last = nums[i];
+            for (int j = i + 1; j < nums.length; j++) {
+                if (nums[j] > last) {
+                    count++;
+                    last = nums[j];
+                }
+            }
+            if (count > cnt)
+                cnt = count;
+
+            while (i < nums.length - 1 && nums[i + 1] > nums[i])
+                i++;
+        }
+
+        return cnt;
     }
 
     static class MyDS {
@@ -53,6 +81,7 @@ public class Test0067LengthOfLIS {
         }
     }
 
+    // 错误版本 ！！！
     private static int lengthOfLIS(int[] nums) {
         MyDS[] arr = new MyDS[nums.length];
         //处理为需要的数据结构
