@@ -40,8 +40,28 @@ public class Test0067LengthOfLIS {
         int[] nums = {1, 3, 6, 7, 9, 4, 10, 5, 6};
         int i = lengthOfLIS(nums);
         int i3 = lengthOfLISV2(nums);
-        int i1 = lengthOfLIS(new int[]{0, 1, 0, 3, 2, 3});
-        int i2 = lengthOfLIS(new int[]{7, 7, 7, 7, 7, 7, 7});
+        int i4 = lengthOfLISV3(nums);
+        int i1 = lengthOfLISV3(new int[]{4, 10, 4, 3, 8, 9});
+        int i2 = lengthOfLISV3(new int[]{7, 7, 7, 7, 7, 7, 7});
+    }
+
+    //v3版本 动态规划
+    private static int lengthOfLISV3(int[] nums) {
+        int[] help = new int[nums.length];
+        help[0] = 1;
+
+        int maxCount = 1;
+
+        for (int i = 1; i < nums.length; i++) {
+            help[i] = 1;
+            for (int j = 0; j < i; j++) {
+                if (nums[j] < nums[i])
+                    help[i] = Math.max(help[i], help[j] + 1);
+            }
+            maxCount = Math.max(help[i], maxCount);
+        }
+
+        return maxCount;
     }
 
     //v2版本 还是错误！！！
