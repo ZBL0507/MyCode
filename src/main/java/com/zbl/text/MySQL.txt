@@ -3,6 +3,11 @@
     gmt_modify     timestamp   default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '最后修改时间',
 
 
+【工作中遇到的场景】
+    - 当sql语句中的where过滤中使用的字段(带有索引)和order by 后面的字段不一致时，可能会导致索引变慢，出现文件排序
+
+
+
 【索引失效情况】
     - 不同的字符集进行比较前需要进行转换会造成索引失效
 
