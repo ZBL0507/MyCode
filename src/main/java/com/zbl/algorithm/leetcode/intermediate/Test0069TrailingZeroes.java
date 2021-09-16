@@ -38,6 +38,25 @@ public class Test0069TrailingZeroes {
 
     }
 
+    private static int trailingZeroesV2(int n) {
+        if (n == 0 || n == 1)
+            return 0;
+
+        BigInteger res = BigInteger.ONE;
+
+        for (int i = 2; i <= n; i++) {
+            res = res.multiply(BigInteger.valueOf(i));
+        }
+
+        int count = 0;
+        while (res.mod(BigInteger.TEN).equals(BigInteger.ZERO)) {
+            count++;
+            res = res.divide(BigInteger.TEN);
+        }
+
+        return count;
+    }
+
     private static int trailingZeroes(int n) {
         String factorial = factorial(n);
         int count = 0;
