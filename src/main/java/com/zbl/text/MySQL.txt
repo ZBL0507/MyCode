@@ -120,3 +120,17 @@
     实际上， 原子性 底层就是通过 undo log 实现的。undo log主要记录了数据的逻辑变化，
     比如一条 INSERT 语句，对应一条DELETE 的 undo log ，对于每个 UPDATE 语句，对应一条相反的 UPDATE 的 undo log ，这样在发生错误时，就能回滚到事务之前的数据状态。
     同时， undo log 也是 MVCC(多版本并发控制)实现的关键
+
+
+
+【MySQL case...when...使用场景示例】
+    update tb_store set merchant_id =
+        case id
+        when 36     then 2
+        when 160541 then 1289
+        when 434343 then 2
+            else 0 end where id in(36, 160541);
+
+
+
+
