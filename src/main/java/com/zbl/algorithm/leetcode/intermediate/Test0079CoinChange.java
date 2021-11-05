@@ -1,5 +1,6 @@
 package com.zbl.algorithm.leetcode.intermediate;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -45,10 +46,26 @@ public class Test0079CoinChange {
 
     public static void main(String[] args) {
         int[] coins = {2};
-        int change = coinChange(coins, 3);
-        int change2 = coinChange(coins, 17);
+        int change = coinChangeV2(coins, 6);
+        int change2 = coinChangeV2(coins, 17);
         System.out.println(change);
     }
+
+
+    //V2版本，动态规划
+    private static int coinChangeV2(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, Integer.MAX_VALUE - 10);
+        dp[0] = 0;
+
+        for (int i = 0; i < amount + 1; i++)
+            for (int coin : coins)
+                if (coin <= i)
+                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+
+        return dp[amount] > amount ? -1 : dp[amount];
+    }
+
 
     private static int coinChange(int[] coins, int amount) {
         final HashMap<Integer, Integer> map = new HashMap<>();
