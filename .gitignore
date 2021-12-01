@@ -2,3 +2,4 @@
 mycode.iml
 .project
 target/
+.DS_Store
