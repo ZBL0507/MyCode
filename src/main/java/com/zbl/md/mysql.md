@@ -36,3 +36,19 @@ mysql> set query_cache_type = 1;
 
 ### innodb缓冲池大小设置
 ![](.mysql_images/efbc39e7.png)
+
+### 默认innodb缓冲池的个数
+![](.mysql_images/79bc9526.png)
+
+### 查看mysql提供的存储引擎
+![](.mysql_images/61cf39fa.png)
+
+### InnoDB和MyISAM的区别
+    1. MyISAM不支持外键，InnoDB支持外键
+    
+    2. MyISAM不支持事务，InnoDB支持事务
+    
+    3. MyISAM是表级锁，即使操作一条记录也会锁住整张表，不适合高并发的操作
+       InnoDB是行级锁，操作时只锁某一行，不对其他行有影响，适合高并发的操作
+    
+    4. MyISAM关注点是性能，节省资源，消耗少，简单业务  InnoDB关注事务，并发写，事务，更大资源
