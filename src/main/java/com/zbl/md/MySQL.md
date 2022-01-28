@@ -206,30 +206,30 @@ MySQL的InnoDB存储引擎在设计时是将根节点常驻内存的，也就是
     数据库I/O操作的最小单位是页。
     ```
     InnoDB数据页的大小：
-    ![](.MySQL_images/3405d9ee.png)
+![](.MySQL_images/3405d9ee.png)
   + 数据页的7个部分：
-    ![](.MySQL_images/abb4af0d.png)
+![](.MySQL_images/abb4af0d.png)
     + 文件头：
-      ![](.MySQL_images/e01694fe.png)
+![](.MySQL_images/e01694fe.png)
     + 文件尾：
-      ![](.MySQL_images/7fde9aea.png)
+![](.MySQL_images/7fde9aea.png)
     + 空闲空间：
-      ![](.MySQL_images/0d15982b.png)
+![](.MySQL_images/0d15982b.png)
     + 用户记录：
-      ![](.MySQL_images/676a6406.png)
+![](.MySQL_images/676a6406.png)
     + 最小最大记录
-      ![](.MySQL_images/1cc2bcef.png)
+![](.MySQL_images/1cc2bcef.png)
       
-      ![](.MySQL_images/deee0418.png)
+![](.MySQL_images/deee0418.png)
     + 页目录
     + 页面头部：
-      ![](.MySQL_images/2be67bf4.png)
+![](.MySQL_images/2be67bf4.png)
       
 + InnoDB行格式
-  ![](.MySQL_images/f652b076.png)
+![](.MySQL_images/f652b076.png)
   
-  ![](.MySQL_images/c6195cb0.png)
+![](.MySQL_images/c6195cb0.png)
   
-  ![](.MySQL_images/da046d4c.png)
+![](.MySQL_images/da046d4c.png)
   
   
