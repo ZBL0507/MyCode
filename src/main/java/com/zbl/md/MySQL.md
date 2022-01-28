@@ -232,4 +232,112 @@ MySQL的InnoDB存储引擎在设计时是将根节点常驻内存的，也就是
   
   ![](.MySQL_images/da046d4c.png)
   
+
+### 索引的分类
++ 从功能逻辑上分类：
+    1. 普通索引
+    2. 唯一索引
+    3. 主键索引
+    4. 全文索引
+    
++ 从物理实现上分类：
+    1. 聚簇索引
+    2. 非聚簇索引
+    
++ 按字段个数分类：
+    1. 单列索引
+    2. 联合索引
+    
+### 创建索引的三种方式
++ 创建表的时候就创建索引
+  ```mysql
+  # 隐式的方式创建索引，在声明有主键约束、唯一性约束、外键约束的字段上，会自动的添加相关的索引
+  CREATE DATABASE dbtest2;
+
+  USE dbtest2;
+
+  CREATE TABLE dept(
+      dept_id INT PRIMARY KEY AUTO_INCREMENT,
+      dept_name VARCHAR(20)
+  );
+
+  CREATE TABLE emp(
+      emp_id INT PRIMARY KEY AUTO_INCREMENT,
+      emp_name VARCHAR(20) UNIQUE,
+      dept_id INT,
+      CONSTRAINT emp_dept_id_fk FOREIGN KEY(dept_id) REFERENCES dept(dept_id)
+  );
   
+  # 显示的创建索引
+  # 基本语法：
+  CREATE TABLE table_name [col_name data_type] [UNIQUE|FULLTEXT|SPATIAL] [INDEX|KEY] [index_name] (col_name [length]) [ASC|DESC]
+  # 1.创建普通的索引
+  CREATE TABLE book (
+      book_id INT,
+      book_name VARCHAR(100),
+      AUTHORS VARCHAR(100),
+      info VARCHAR(100),
+      COMMENT VARCHAR(100),
+      year_publication YEAR,
+      #声明索引
+      INDEX idx_bname(book_name)
+  );
+ 
+  # 2.创建唯一索引
+  CREATE TABLE book1 (
+      book_id INT,
+      book_name VARCHAR(100),
+      AUTHORS VARCHAR(100),
+      info VARCHAR(100),
+      COMMENT VARCHAR(100),
+      year_publication YEAR,
+      #声明索引
+      unique INDEX idx_bname(book_name)
+  );
+  
+  # 3.创建联合索引
+  CREATE TABLE book2 (
+      book_id INT,
+      book_name VARCHAR(100),
+      AUTHORS VARCHAR(100),
+      info VARCHAR(100),
+      COMMENT VARCHAR(100),
+      year_publication YEAR,
+      #声明索引
+      INDEX idx_name_info(book_name, info)
+  );
+  ```
++ 在已经存在的表上创建索引1
+  ```mysql
+  CREATE TABLE book3 (
+      book_id INT,
+      book_name VARCHAR(100),
+      AUTHORS VARCHAR(100),
+      info VARCHAR(100),
+      COMMENT VARCHAR(100),
+      year_publication YEAR
+  );
+  alter table book3 add index idx_cmt(COMMENT);
+  alter table book3 add unique uk_idx_bname(book_name);
+  alter table book3 add index mul_bid_bname_info(book_id, book_name, info);
+  ```
++ 在已经存在的表上创建索引2
+  ```mysql
+  CREATE TABLE book4 (
+      book_id INT,
+      book_name VARCHAR(100),
+      AUTHORS VARCHAR(100),
+      info VARCHAR(100),
+      COMMENT VARCHAR(100),
+      year_publication YEAR
+  );
+  create index idx_cmt on book4(COMMENT);
+  create unique index uk_idx_bname on book4(book_name);
+  create index mul_bid_bname_info on book4(book_id, book_name, info);
+  ```  
+
+### 删除索引的方式
+```mysql
+
+```
+
