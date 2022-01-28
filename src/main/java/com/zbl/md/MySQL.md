@@ -1,4 +1,4 @@
-### SQL执行流程
+### item01: SQL执行流程
     1. 客户端 向 服务端 发起请求
     
     2. 服务端查询缓存，若缓存命中，则直接返回，否则进行步骤3 (缓存开关未开启也不会有查询缓存的过程，MySQL8.0不再有这个缓存)
@@ -11,7 +11,7 @@
     
     6. 缓存结果，返回结果
     
-### MySQL的profiling
+### item02: MySQL的profiling
 ```sql
 -- 通过开启profiling来了解查询语句的执行过程及耗时
 -- select @@profiling; 或者 show variables like '%profiling%'; 查看是否开启计划，开启它可以让mysql收集在sql执行时所使用的资源情况
@@ -25,7 +25,7 @@ mysql> set profiling = 1;
 mysql> show profiles;
 ```
 
-### MySQL缓存的开启
+### item03: MySQL缓存的开启
 ```sql
 -- 查看缓存开关
 mysql> show variables like 'query_cache_type';
@@ -34,16 +34,16 @@ mysql> show variables like 'query_cache_type';
 mysql> set query_cache_type = 1;
 ```
 
-### InnoDB缓冲池大小设置
+### item04: InnoDB缓冲池大小设置
 ![](.mysql_images/efbc39e7.png)
 
-### 默认innodb缓冲池的个数
+### item05: 默认innodb缓冲池的个数
 ![](.mysql_images/79bc9526.png)
 
-### 查看mysql提供的存储引擎
+### item06: 查看mysql提供的存储引擎
 ![](.mysql_images/61cf39fa.png)
 
-### InnoDB和MyISAM的区别
+### item07: InnoDB和MyISAM的区别
     1. MyISAM不支持外键，InnoDB支持外键
     
     2. MyISAM不支持事务，InnoDB支持事务
@@ -53,7 +53,7 @@ mysql> set query_cache_type = 1;
     
     4. MyISAM关注点是性能，节省资源，消耗少，简单业务  InnoDB关注事务，并发写，事务，更大资源
 
-### 聚簇索引
+### item08: 聚簇索引
     聚簇索引并不是一种单独的索引类型，而是一种数据存储方式（所有的数据记录都存储在了叶子节点），也就是所谓的索引即数据，数据即索引。
     
     术语"聚簇"表示数据行和相邻的键值聚簇的存储在一起
@@ -89,7 +89,7 @@ mysql> set query_cache_type = 1;
 #### 聚簇索引示例图：
 ![](.mysql_images/b00b1134.png)
 
-### 二级索引（辅助索引，非聚簇索引）
+### item09: 二级索引（辅助索引，非聚簇索引）
 ![](.mysql_images/a38d4746.png)
 ```text
 概念：回表
@@ -106,11 +106,11 @@ mysql> set query_cache_type = 1;
 非聚簇索引的存在不影响数据在聚簇索引中的组织，所以一张表可以有多个非聚簇索引。
 ```
 
-### 联合索引
+### item10: 联合索引
 ![](.mysql_images/2e8f9b9f.png)
 
 
-### InnoDB的B+树索引的注意事项
+### item11: InnoDB的B+树索引的注意事项
 ```text
 1. 根页面位置万年不动
    - 每当为某个表创建一个B+树索引（聚簇索引不是人为创建的，默认就有）的时候，都会为这个索引创建一个根节点页面。
@@ -156,7 +156,7 @@ mysql> set query_cache_type = 1;
    费了半天劲只能存放一条真实的用户记录？所以InnoDB的一个数据页至少可以存放两条记录。
 ```
 
-### MyISAM索引结构
+### item12: MyISAM索引结构
 #### MyISAM中的索引方案虽然也使用树形结构，但是却将索引和数据分开存储：
 + 将表中的记录按照记录的插入顺序单独存储在一个文件中，成为数据文件，这个文件并不划分为若干个数据页，有多少记录就往这个文件中塞多少记录就成了。
   由于在插入数据的时候并没有刻意按照主键大小排序，所以我们并不能在这些数据上使用二分法进行查找。
@@ -166,7 +166,7 @@ mysql> set query_cache_type = 1;
 ![](.MySQL_images/0e845eee.png)
 
 
-### MyISAM与InnoDB对比
+### item13: MyISAM与InnoDB对比
 #### MyISAM的索引方式都是“非聚簇”的，与InnoDB包含1个聚簇索引是不同的。
 + 在InnoDB存储引擎中，我们只需要根据主键值对聚簇索引进行一次查找就能找到对应的记录，而在MyISAM中却需要进行一次回表操作，
   意味着MyISAM中建立的索引相当于全部都是二级索引。
@@ -178,7 +178,7 @@ mysql> set query_cache_type = 1;
   如果不存在这种列，则MySQL自动为InnoDB表生成一个隐含字段作为主键，这个字段长度为6个字节，类型为长整型。
   
 
-### B+树和B树的差异：
+### item14: B+树和B树的差异：
 + 有k个孩子的节点就有k个关键字，也就是孩子数量=关键字数量，而B树中，孩子数量=关键字数量+1。
 + 非叶子节点的关键字也会同时存在在子节点中，并且是在子节点中所有关键字的最大（最小）。
 + 非叶子节点仅用于索引，不保存数据记录，跟记录有关的信息都放在叶子节点中。而B树中，非叶子节点既保存索引，也保存数据。
@@ -186,7 +186,7 @@ mysql> set query_cache_type = 1;
 ![](.MySQL_images/a81319a4.png)
 
 
-### B+树的存储能力如何？为何说一般查找行记录，最多只需1~3次磁盘IO
+### item15: B+树的存储能力如何？为何说一般查找行记录，最多只需1~3次磁盘IO
 ```text
 InnoDB存储引擎中也的大小为16KB，一般表的主键类型为int（占用4个字节），或者bigint（占用8个字节），指针类型也一般为4个或8个字节，
 也就是说一个页（B+Tree中的一个节点）中大概存储16KB/(8B+8B)=1K个键值（因为是估计值，方便计算，这里的K取值为1000。）
@@ -197,7 +197,7 @@ MySQL的InnoDB存储引擎在设计时是将根节点常驻内存的，也就是
 ```
 
 
-### InnoDB数据存储结构
+### item16: InnoDB数据存储结构
 + 数据库的存储结构：页
   + 磁盘与内存交互基本单位：页
     ```text
@@ -233,7 +233,7 @@ MySQL的InnoDB存储引擎在设计时是将根节点常驻内存的，也就是
   ![](.MySQL_images/da046d4c.png)
   
 
-### 索引的分类
+### item17: 索引的分类
 + 从功能逻辑上分类：
     1. 普通索引
     2. 唯一索引
@@ -248,7 +248,7 @@ MySQL的InnoDB存储引擎在设计时是将根节点常驻内存的，也就是
     1. 单列索引
     2. 联合索引
     
-### 创建索引的三种方式
+### item18: 创建索引的三种方式
 + 创建表的时候就创建索引
   ```mysql
   # 隐式的方式创建索引，在声明有主键约束、唯一性约束、外键约束的字段上，会自动的添加相关的索引
@@ -336,8 +336,37 @@ MySQL的InnoDB存储引擎在设计时是将根节点常驻内存的，也就是
   create index mul_bid_bname_info on book4(book_id, book_name, info);
   ```  
 
-### 删除索引的方式
+### item19: 删除索引的方式
 ```mysql
+CREATE TABLE book5 (
+    book_id INT,
+    book_name VARCHAR(100),
+    AUTHORS VARCHAR(100),
+    info VARCHAR(100),
+    COMMENT VARCHAR(100),
+    year_publication YEAR
+);
+create index idx_cmt on book5(COMMENT);
+create unique index uk_idx_bname on book5(book_name);
+create index mul_bid_bname_info on book5(book_id, book_name, info);
 
+# 方式一
+alter table book5 drop index idx_cmt;
+
+# 方式二
+drop index uk_idx_bname on book5;
+# 提示：
+# 删除表中的列时，如果要删除的列为索引的组成部分，则该列也会从索引中删除。如果组成索引的所有列都被删除，则整个索引将被删除。
 ```
+
+### item20: MySQL8.0索引新特性
+1. 支持降序索引
+2. 隐藏索引
+
+
+
+
+
+
+
 
