@@ -219,8 +219,17 @@ MySQL的InnoDB存储引擎在设计时是将根节点常驻内存的，也就是
       ![](.MySQL_images/676a6406.png)
     + 最小最大记录
       ![](.MySQL_images/1cc2bcef.png)
+      
       ![](.MySQL_images/deee0418.png)
     + 页目录
     + 页面头部：
       ![](.MySQL_images/2be67bf4.png)
       
++ InnoDB行格式
+  ![](.MySQL_images/f652b076.png)
+  
+  ![](.MySQL_images/c6195cb0.png)
+  
+  ![](.MySQL_images/da046d4c.png)
+  
+  
