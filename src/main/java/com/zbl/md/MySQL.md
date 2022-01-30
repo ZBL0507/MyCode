@@ -1,4 +1,4 @@
-### item01: SQL执行流程
+## item01: SQL执行流程
     1. 客户端 向 服务端 发起请求
     
     2. 服务端查询缓存，若缓存命中，则直接返回，否则进行步骤3 (缓存开关未开启也不会有查询缓存的过程，MySQL8.0不再有这个缓存)
@@ -10,8 +10,10 @@
     5. 生成执行计划，交于存储引擎进行查询
     
     6. 缓存结果，返回结果
-    
-### item02: MySQL的profiling
+ 
+
+<br/><br/>    
+## item02: MySQL的profiling
 ```sql
 -- 通过开启profiling来了解查询语句的执行过程及耗时
 -- select @@profiling; 或者 show variables like '%profiling%'; 查看是否开启计划，开启它可以让mysql收集在sql执行时所使用的资源情况
@@ -25,7 +27,9 @@ mysql> set profiling = 1;
 mysql> show profiles;
 ```
 
-### item03: MySQL缓存的开启
+
+<br/><br/>
+## item03: MySQL缓存的开启
 ```sql
 -- 查看缓存开关
 mysql> show variables like 'query_cache_type';
@@ -34,16 +38,24 @@ mysql> show variables like 'query_cache_type';
 mysql> set query_cache_type = 1;
 ```
 
-### item04: InnoDB缓冲池大小设置
+
+<br/><br/>
+## item04: InnoDB缓冲池大小设置
 ![](.mysql_images/efbc39e7.png)
 
-### item05: 默认innodb缓冲池的个数
+
+<br/><br/>
+## item05: 默认innodb缓冲池的个数
 ![](.mysql_images/79bc9526.png)
 
-### item06: 查看mysql提供的存储引擎
+
+<br/><br/>
+## item06: 查看mysql提供的存储引擎
 ![](.mysql_images/61cf39fa.png)
 
-### item07: InnoDB和MyISAM的区别
+
+<br/><br/>
+## item07: InnoDB和MyISAM的区别
     1. MyISAM不支持外键，InnoDB支持外键
     
     2. MyISAM不支持事务，InnoDB支持事务
@@ -53,7 +65,9 @@ mysql> set query_cache_type = 1;
     
     4. MyISAM关注点是性能，节省资源，消耗少，简单业务  InnoDB关注事务，并发写，事务，更大资源
 
-### item08: 聚簇索引
+
+<br/><br/>
+## item08: 聚簇索引
     聚簇索引并不是一种单独的索引类型，而是一种数据存储方式（所有的数据记录都存储在了叶子节点），也就是所谓的索引即数据，数据即索引。
     
     术语"聚簇"表示数据行和相邻的键值聚簇的存储在一起
@@ -89,7 +103,9 @@ mysql> set query_cache_type = 1;
 #### 聚簇索引示例图：
 ![](.mysql_images/b00b1134.png)
 
-### item09: 二级索引（辅助索引，非聚簇索引）
+
+<br/><br/>
+## item09: 二级索引（辅助索引，非聚簇索引）
 ![](.mysql_images/a38d4746.png)
 ```text
 概念：回表
@@ -106,11 +122,13 @@ mysql> set query_cache_type = 1;
 非聚簇索引的存在不影响数据在聚簇索引中的组织，所以一张表可以有多个非聚簇索引。
 ```
 
-### item10: 联合索引
+<br/><br/>
+## item10: 联合索引
 ![](.mysql_images/2e8f9b9f.png)
 
 
-### item11: InnoDB的B+树索引的注意事项
+<br/><br/>
+## item11: InnoDB的B+树索引的注意事项
 ```text
 1. 根页面位置万年不动
    - 每当为某个表创建一个B+树索引（聚簇索引不是人为创建的，默认就有）的时候，都会为这个索引创建一个根节点页面。
@@ -156,20 +174,24 @@ mysql> set query_cache_type = 1;
    费了半天劲只能存放一条真实的用户记录？所以InnoDB的一个数据页至少可以存放两条记录。
 ```
 
-### item12: MyISAM索引结构
+<br/><br/>
+## item12: MyISAM索引结构
 #### MyISAM中的索引方案虽然也使用树形结构，但是却将索引和数据分开存储：
 + 将表中的记录按照记录的插入顺序单独存储在一个文件中，成为数据文件，这个文件并不划分为若干个数据页，有多少记录就往这个文件中塞多少记录就成了。
   由于在插入数据的时候并没有刻意按照主键大小排序，所以我们并不能在这些数据上使用二分法进行查找。
+  
 + 使用MyISAM存储引擎的表会把索引信息另外存储到一个称为索引文件的另一个文件中。MyISAM会单独为表的主键创建一个索引，
   只不过在索引的叶子节点中存储的不是完整的用户记录，而是主键值+数据记录地址的组合
   
 ![](.MySQL_images/0e845eee.png)
 
 
-### item13: MyISAM与InnoDB对比
+<br/><br/>
+## item13: MyISAM与InnoDB对比
 #### MyISAM的索引方式都是“非聚簇”的，与InnoDB包含1个聚簇索引是不同的。
 + 在InnoDB存储引擎中，我们只需要根据主键值对聚簇索引进行一次查找就能找到对应的记录，而在MyISAM中却需要进行一次回表操作，
   意味着MyISAM中建立的索引相当于全部都是二级索引。
+  
 + InnoDB的数据文件本身就是索引文件，而MyISAM索引文件和数据文件是分离的，索引文件仅保存数据记录的地址。
 + InnoDB的非聚簇索引data域存储相应记录的主键值，而MyISAM索引记录的是地址。换句话说，InnoDB的所有非聚簇索引都在引用主键作为data域。
 + MyISAM的回表操作是十分快速的，因为是拿着地址偏移量直接到文件中取数据的，反观InnoDB是通过获取主键之后再去聚簇索引里找记录，虽然说也不慢，
@@ -178,15 +200,18 @@ mysql> set query_cache_type = 1;
   如果不存在这种列，则MySQL自动为InnoDB表生成一个隐含字段作为主键，这个字段长度为6个字节，类型为长整型。
   
 
-### item14: B+树和B树的差异：
+<br/><br/>
+## item14: B+树和B树的差异：
 + 有k个孩子的节点就有k个关键字，也就是孩子数量=关键字数量，而B树中，孩子数量=关键字数量+1。
+
 + 非叶子节点的关键字也会同时存在在子节点中，并且是在子节点中所有关键字的最大（最小）。
 + 非叶子节点仅用于索引，不保存数据记录，跟记录有关的信息都放在叶子节点中。而B树中，非叶子节点既保存索引，也保存数据。
 + 所有关键字都在叶子节点出现，叶子节点构成一个有序的链表，而且叶子节点本身按照关键字的大小从小到大顺序链接。
 ![](.MySQL_images/a81319a4.png)
 
 
-### item15: B+树的存储能力如何？为何说一般查找行记录，最多只需1~3次磁盘IO
+<br/><br/>
+## item15: B+树的存储能力如何？为何说一般查找行记录，最多只需1~3次磁盘IO
 ```text
 InnoDB存储引擎中也的大小为16KB，一般表的主键类型为int（占用4个字节），或者bigint（占用8个字节），指针类型也一般为4个或8个字节，
 也就是说一个页（B+Tree中的一个节点）中大概存储16KB/(8B+8B)=1K个键值（因为是估计值，方便计算，这里的K取值为1000。）
@@ -197,7 +222,8 @@ MySQL的InnoDB存储引擎在设计时是将根节点常驻内存的，也就是
 ```
 
 
-### item16: InnoDB数据存储结构
+<br/><br/>
+## item16: InnoDB数据存储结构
 + 数据库的存储结构：页
   + 磁盘与内存交互基本单位：页
     ```text
@@ -233,22 +259,27 @@ MySQL的InnoDB存储引擎在设计时是将根节点常驻内存的，也就是
   ![](.MySQL_images/da046d4c.png)
   
 
-### item17: 索引的分类
+<br/><br/>
+## item17: 索引的分类
 + 从功能逻辑上分类：
     1. 普通索引
+    
     2. 唯一索引
     3. 主键索引
     4. 全文索引
     
 + 从物理实现上分类：
     1. 聚簇索引
+    
     2. 非聚簇索引
     
 + 按字段个数分类：
     1. 单列索引
-    2. 联合索引
     
-### item18: 创建索引的三种方式
+    2. 联合索引
+ 
+<br/><br/>   
+## item18: 创建索引的三种方式
 + 创建表的时候就创建索引
   ```mysql
   # 隐式的方式创建索引，在声明有主键约束、唯一性约束、外键约束的字段上，会自动的添加相关的索引
@@ -336,7 +367,8 @@ MySQL的InnoDB存储引擎在设计时是将根节点常驻内存的，也就是
   create index mul_bid_bname_info on book4(book_id, book_name, info);
   ```  
 
-### item19: 删除索引的方式
+<br/><br/>
+## item19: 删除索引的方式
 ```mysql
 CREATE TABLE book5 (
     book_id INT,
@@ -359,12 +391,14 @@ drop index uk_idx_bname on book5;
 # 删除表中的列时，如果要删除的列为索引的组成部分，则该列也会从索引中删除。如果组成索引的所有列都被删除，则整个索引将被删除。
 ```
 
-### item20: MySQL8.0索引新特性
+<br/><br/>
+## item20: MySQL8.0索引新特性
 1. 支持降序索引
+
 2. 隐藏索引
 
-
-### item21: 哪些情况适合创建索引
+<br/><br/>
+## item21: 哪些情况适合创建索引
 1. 字段的数值有唯一性的限制
 2. 频繁作为 where 查询条件的字段
 3. 经常 group by 和 order by 的列
@@ -396,12 +430,127 @@ drop index uk_idx_bname on book5;
           也就是使用索引列前缀的方式 无法支持使用索引排序，只能使用文件排序。
    ```
 9. 区分度高(散列性高)的列适合作为索引
+
 10. 使用最频繁的列放到联合索引的左侧
 11. 在多个字段都要创建索引的情况下，联合索引优于单值索引。
 
 
+<br/><br/>
+## item22: 哪些情况不适合创建索引
+1. 在where(group by, order by)中使用不到的字段，不要设置索引
+
+2. 数据量小的表最好不要使用索引
+3. 有大量重复数据的列上不要建立索引
+4. 避免对经常更新的表创建过多的索引
+5. 不建议用无序的值作为索引
+6. 删除不再使用或者很少使用的索引
+7. 不要定义冗余或重复的索引
 
 
+<br/><br/>
+## item23: 性能分析工具的使用
+### 1. 数据库服务器的优化步骤
+![](.MySQL_images/79eabbab.png)
+
+![](.MySQL_images/cdda601b.png)
+
+![](.MySQL_images/c350a69b.png)
+
+![](.MySQL_images/8b3a578b.png)
+
+### 2. 查看系统性能参数
+在```MySQL```中，可以使用```show status```语句查询一些```MySQL```数据库服务器的```性能参数```、```执行频率``` <br/>
+```show status```语句语法如下：
+```text
+show [global|session] status like '参数';
+```
++ Connections: 连接MySQL服务器的次数。
+
++ Uptime: MySQL服务器的上线时间。
+
++ Slow_queries: 慢查询的此时。
+
++ Innodb_rows_read: Select查询返回的行数。
+
++ Innodb_rows_inserted: 执行insert操作插入的行数。
+
++ Innodb_rows_updated: 执行update操作更新的行数。
+
++ Innodb_rows_deleted: 执行delete操作删除的行数。
+
++ Com_select: 查询操作的次数。
+
++ Com_insert: 插入操作的次数。对于批量插入的insert操作，只累加一次。
+
++ Com_update: 更新操作的次数
+
++ Com_delete: 删除操作的次数
+
+### 3. 统计SQL的查询成本：last_query_cost
+
+### 4. 定位执行慢的SQL：慢查询日志
++ ```MySQL```的慢查询日志，用来记录再```MySQL```中```响应时间超过阈值```的语句，具体指运行时间超过```long_query_time```值的```SQL```,
+  则会被记录到慢查询日志中，```long_query_time```的默认值为10，意思是运行10秒以上(不含10秒)的语句。
++ 默认情况下，```MySQL```数据库```没有开启慢查询日志```，需要我们手动来设置这个参数。```如果不是调优需要的话，一般不建议启动该参数```，因为开启慢查询日志会或多或少带来一定的性能影响。
+
++ 开启慢查询日志参数slow_query_log <br/>
+  在使用前，我们需要先看下慢查询是否已经开启，使用下面这条命令即可：
+  ```mysql
+  mysql> show variables like '%slow_query_log%';
+  ```
+  ![](.MySQL_images/82366b3a.png)
+  <br/>
+  如果看到```slow_query_log=OFF```,我们可以使用下面命令打开：
+  ```mysql
+  mysql> set global slow_query_log='ON';
+  ```
++ 修改long_query_time阈值
+  ```mysql
+  mysql> set global long_query_time = 1; #修改慢查询阈值时间为1秒
+  ```
++ 配置文件的方式修改
+  ![](.MySQL_images/9c699436.png)
+  
++ 补充说明
+  ![](.MySQL_images/f260001a.png)
+  
+
+### 5. 慢查询日志分析工具：mysqldumpslow
++ 在生产环境中，如果要分析慢查询日志，```MySQL```提供了日志分析工具```mysqldumpslow```<br>
+  查看```mysqldumpslow```的帮助信息
+  ```text
+  mysqldumpslow --help #这个不是mysql命令，需要在终端中运行
+  ``` 
+  ![](.MySQL_images/fbcf4975.png)
+  
+### 6. 关闭慢查询日志
++ 方式1: 永久性方式<br/>
+        修改配置文件
+    ```text
+    [mysqld]
+    slow_query_log=OFF
+    # 或者注释掉，或者删除掉
+    # slow_query_log=OFF
+    ```
++ 方式2: 临时性关闭
+    ```mysql
+    mysql> set global slow_query_log = off;
+    ```
+    
+### 7. 删除慢查询日志
+   ```text
+    mysqladmin -uroot -p flush-logs slow
+   ```
+
+
+<br/><br/>
+## item24: 查看SQL执行成本：show profile
++ show profile 是 MySQL提供的可以用来分析当前会话中SQL都做了什么、执行的资源消耗情况的工具，可用于sql调优的测量。默认情况下处于关闭状态，并保存最近15次的运行结果<br/>
+  在会话级别开启这个功能：
+  ```mysql
+  mysql> show variables like 'profiling';
+  mysql> set profiling = 'on';
+  ```
 
 
 
