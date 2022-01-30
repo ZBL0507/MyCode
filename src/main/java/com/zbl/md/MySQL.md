@@ -520,7 +520,8 @@ show [global|session] status like '参数';
   查看```mysqldumpslow```的帮助信息
   ```text
   mysqldumpslow --help #这个不是mysql命令，需要在终端中运行
-  ```
+  ``` 
+  
   ![](.MySQL_images/fbcf4975.png)
 
 
