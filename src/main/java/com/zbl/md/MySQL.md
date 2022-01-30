@@ -521,9 +521,36 @@ show [global|session] status like '参数';
   ```text
   mysqldumpslow --help #这个不是mysql命令，需要在终端中运行
   ``` 
-![](.MySQL_images/fbcf4975.png)
+  ![](.MySQL_images/fbcf4975.png)
+  
+### 6. 关闭慢查询日志
++ 方式1: 永久性方式<br/>
+        修改配置文件
+    ```text
+    [mysqld]
+    slow_query_log=OFF
+    # 或者注释掉，或者删除掉
+    # slow_query_log=OFF
+    ```
++ 方式2: 临时性关闭
+    ```mysql
+    mysql> set global slow_query_log = off;
+    ```
+    
+### 7. 删除慢查询日志
+   ```text
+    mysqladmin -uroot -p flush-logs slow
+   ```
 
 
+<br/><br/>
+## item24: 查看SQL执行成本：show profile
++ show profile 是 MySQL提供的可以用来分析当前会话中SQL都做了什么、执行的资源消耗情况的工具，可用于sql调优的测量。默认情况下处于关闭状态，并保存最近15次的运行结果<br/>
+  在会话级别开启这个功能：
+  ```mysql
+  mysql> show variables like 'profiling';
+  mysql> set profiling = 'on';
+  ```
 
 
 
