@@ -550,10 +550,38 @@ show [global|session] status like '参数';
   ```mysql
   mysql> show variables like 'profiling';
   mysql> set profiling = 'on';
+  mysql> show profiles;
+  mysql> show profile for query 23;
   ```
 
 
+<br/><br/>
+## item25: 分析查询语句：explain 
+### 1. 能做什么？
++ 表的读取顺序
+
++ 数据读取操作的操作类型
++ 哪些索引可以使用
++ 哪些索引被实际使用
++ 表之间的引用
++ 每张表有多少行被优化器查询
 
 
+### 2. 版本情况
++ ```MySQL5.6.3```以前只能```explain select```；```MySQL5.6.3```以后就可以```explain select，update，delete```
+
++ 在5.7以前的版本中，想要显示```partitions```需要使用```explain partitions```命令；想要显示```filtered```需要使用```explain extended```命令。在5.7版本后，默认```explain```直接显示```partitions```和```filtered```中的信息。
+
+
+### 3. 基本语法
+```text
+explain select select_options
+
+或者
+
+describe select select_options
+```
+```explain```语句输出的各个列的作用如下:
+![](.MySQL_images/72465d6d.png)
 
 
