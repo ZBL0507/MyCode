@@ -582,6 +582,23 @@ explain select select_options
 describe select select_options
 ```
 ```explain```语句输出的各个列的作用如下:
+
 ![](.MySQL_images/72465d6d.png)
 
 
+### 4. explain各列作用
++ table 
+  ```text
+  表名
+  查询的每一行记录都对应着一个单表
+  ```
+  
++ id <br>
+  + 在一个大的查询语句中每个select关键字都对应一个唯一的id
+  
+  + id如果相同，可以认为是一组，从上往下顺序执行
+  + 在所有组中，id值越大，优先级越高，越先执行
+  + 关注点：id号每个号码，表示一趟独立的查询，一个sql的查询趟数越少越好
+  
++ 
+  
