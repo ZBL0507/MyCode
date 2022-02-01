@@ -1,4 +1,4 @@
-## item01: SQL执行流程
+## item01： SQL执行流程
     1. 客户端 向 服务端 发起请求
     
     2. 服务端查询缓存，若缓存命中，则直接返回，否则进行步骤3 (缓存开关未开启也不会有查询缓存的过程，MySQL8.0不再有这个缓存)
@@ -13,7 +13,7 @@
  
 
 <br/><br/>    
-## item02: MySQL的profiling
+## item02： MySQL的profiling
 ```sql
 -- 通过开启profiling来了解查询语句的执行过程及耗时
 -- select @@profiling; 或者 show variables like '%profiling%'; 查看是否开启计划，开启它可以让mysql收集在sql执行时所使用的资源情况
@@ -29,7 +29,7 @@ mysql> show profiles;
 
 
 <br/><br/>
-## item03: MySQL缓存的开启
+## item03： MySQL缓存的开启
 ```sql
 -- 查看缓存开关
 mysql> show variables like 'query_cache_type';
@@ -40,22 +40,32 @@ mysql> set query_cache_type = 1;
 
 
 <br/><br/>
-## item04: InnoDB缓冲池大小设置
+## item04： InnoDB缓冲池大小设置
+```mysql
+show variables like 'innodb_buffer_pool_size';
+set innodb_buffer_pool_size = 268435456
+```
 ![](.mysql_images/efbc39e7.png)
 
 
 <br/><br/>
-## item05: 默认innodb缓冲池的个数
+## item05： 默认innodb缓冲池的个数
+```mysql
+show variables like 'innodb_buffer_pool_instances';
+```
 ![](.mysql_images/79bc9526.png)
 
 
 <br/><br/>
-## item06: 查看mysql提供的存储引擎
+## item06： 查看mysql提供的存储引擎
+```mysql
+show engines ;
+```
 ![](.mysql_images/61cf39fa.png)
 
 
 <br/><br/>
-## item07: InnoDB和MyISAM的区别
+## item07： InnoDB和MyISAM的区别
     1. MyISAM不支持外键，InnoDB支持外键
     
     2. MyISAM不支持事务，InnoDB支持事务
@@ -67,7 +77,7 @@ mysql> set query_cache_type = 1;
 
 
 <br/><br/>
-## item08: 聚簇索引
+## item08： 聚簇索引
     聚簇索引并不是一种单独的索引类型，而是一种数据存储方式（所有的数据记录都存储在了叶子节点），也就是所谓的索引即数据，数据即索引。
     
     术语"聚簇"表示数据行和相邻的键值聚簇的存储在一起
@@ -105,7 +115,7 @@ mysql> set query_cache_type = 1;
 
 
 <br/><br/>
-## item09: 二级索引（辅助索引，非聚簇索引）
+## item09： 二级索引（辅助索引，非聚簇索引）
 ![](.mysql_images/a38d4746.png)
 ```text
 概念：回表
@@ -123,12 +133,12 @@ mysql> set query_cache_type = 1;
 ```
 
 <br/><br/>
-## item10: 联合索引
+## item10： 联合索引
 ![](.mysql_images/2e8f9b9f.png)
 
 
 <br/><br/>
-## item11: InnoDB的B+树索引的注意事项
+## item11： InnoDB的B+树索引的注意事项
 ```text
 1. 根页面位置万年不动
    - 每当为某个表创建一个B+树索引（聚簇索引不是人为创建的，默认就有）的时候，都会为这个索引创建一个根节点页面。
@@ -175,7 +185,7 @@ mysql> set query_cache_type = 1;
 ```
 
 <br/><br/>
-## item12: MyISAM索引结构
+## item12： MyISAM索引结构
 #### MyISAM中的索引方案虽然也使用树形结构，但是却将索引和数据分开存储：
 + 将表中的记录按照记录的插入顺序单独存储在一个文件中，成为数据文件，这个文件并不划分为若干个数据页，有多少记录就往这个文件中塞多少记录就成了。
   由于在插入数据的时候并没有刻意按照主键大小排序，所以我们并不能在这些数据上使用二分法进行查找。
@@ -187,7 +197,7 @@ mysql> set query_cache_type = 1;
 
 
 <br/><br/>
-## item13: MyISAM与InnoDB对比
+## item13： MyISAM与InnoDB对比
 #### MyISAM的索引方式都是“非聚簇”的，与InnoDB包含1个聚簇索引是不同的。
 + 在InnoDB存储引擎中，我们只需要根据主键值对聚簇索引进行一次查找就能找到对应的记录，而在MyISAM中却需要进行一次回表操作，
   意味着MyISAM中建立的索引相当于全部都是二级索引。
@@ -201,7 +211,7 @@ mysql> set query_cache_type = 1;
   
 
 <br/><br/>
-## item14: B+树和B树的差异：
+## item14： B+树和B树的差异：
 + 有k个孩子的节点就有k个关键字，也就是孩子数量=关键字数量，而B树中，孩子数量=关键字数量+1。
 
 + 非叶子节点的关键字也会同时存在在子节点中，并且是在子节点中所有关键字的最大（最小）。
@@ -211,7 +221,7 @@ mysql> set query_cache_type = 1;
 
 
 <br/><br/>
-## item15: B+树的存储能力如何？为何说一般查找行记录，最多只需1~3次磁盘IO
+## item15： B+树的存储能力如何？为何说一般查找行记录，最多只需1~3次磁盘IO
 ```text
 InnoDB存储引擎中也的大小为16KB，一般表的主键类型为int（占用4个字节），或者bigint（占用8个字节），指针类型也一般为4个或8个字节，
 也就是说一个页（B+Tree中的一个节点）中大概存储16KB/(8B+8B)=1K个键值（因为是估计值，方便计算，这里的K取值为1000。）
@@ -223,7 +233,7 @@ MySQL的InnoDB存储引擎在设计时是将根节点常驻内存的，也就是
 
 
 <br/><br/>
-## item16: InnoDB数据存储结构
+## item16： InnoDB数据存储结构
 + 数据库的存储结构：页
   + 磁盘与内存交互基本单位：页
     ```text
@@ -260,7 +270,7 @@ MySQL的InnoDB存储引擎在设计时是将根节点常驻内存的，也就是
   
 
 <br/><br/>
-## item17: 索引的分类
+## item17： 索引的分类
 + 从功能逻辑上分类：
     1. 普通索引
     
@@ -279,7 +289,7 @@ MySQL的InnoDB存储引擎在设计时是将根节点常驻内存的，也就是
     2. 联合索引
  
 <br/><br/>   
-## item18: 创建索引的三种方式
+## item18： 创建索引的三种方式
 + 创建表的时候就创建索引
   ```mysql
   # 隐式的方式创建索引，在声明有主键约束、唯一性约束、外键约束的字段上，会自动的添加相关的索引
@@ -368,7 +378,7 @@ MySQL的InnoDB存储引擎在设计时是将根节点常驻内存的，也就是
   ```  
 
 <br/><br/>
-## item19: 删除索引的方式
+## item19： 删除索引的方式
 ```mysql
 CREATE TABLE book5 (
     book_id INT,
@@ -392,13 +402,13 @@ drop index uk_idx_bname on book5;
 ```
 
 <br/><br/>
-## item20: MySQL8.0索引新特性
+## item20： MySQL8.0索引新特性
 1. 支持降序索引
 
 2. 隐藏索引
 
 <br/><br/>
-## item21: 哪些情况适合创建索引
+## item21： 哪些情况适合创建索引
 1. 字段的数值有唯一性的限制
 2. 频繁作为 where 查询条件的字段
 3. 经常 group by 和 order by 的列
@@ -436,7 +446,7 @@ drop index uk_idx_bname on book5;
 
 
 <br/><br/>
-## item22: 哪些情况不适合创建索引
+## item22： 哪些情况不适合创建索引
 1. 在where(group by, order by)中使用不到的字段，不要设置索引
 
 2. 数据量小的表最好不要使用索引
@@ -556,7 +566,7 @@ show [global|session] status like '参数';
 
 
 <br/><br/>
-## item25: 分析查询语句：explain 
+## item25： 分析查询语句：explain 
 ### 1. 能做什么？
 + 表的读取顺序
 
@@ -762,7 +772,47 @@ describe select select_options
     explain select distinct common_field from s1;
     explain select common_field, count(*) as amount from s1 group by common_field;
     ```
+    
+### 5. explain的注意点
++ explain不考虑各种cache
++ explain不能显示mysql在执行查询时所作的优化工作
++ explain不会告诉你关于触发器，存储过程的信息或用户自定义函数对查询的影响情况
++ 部分统计信息是估算的，并不是精确值
 
+
+<br/><br/>
+## item26： explain的进一步使用
+### 1. explain四种输出格式
++ 传统格式
+  <br>传统格式简单明了，输出是一个表格形式，概要说明查询计划
+  ```mysql
+  explain select s1.key1, s2.key1 from s1 left join s2 on s1.key1 = s2.key1 where s2.common_field is not null ;
+  ```
+  ![](.MySQL_images/312e17bf.png)
++ json格式
+  <br>传统格式中介绍的explain语句输出中缺少列一个衡量执行计划好坏的重要属性——成本。而json格式是四种格式里面输出信息最详尽的格式，里面包含了执行的成本信息。
+  + json格式：在explain单词和真正的查询语句中间加上format = json。
+    ```mysql
+    explain format = json select ...
+    ```
+  + explain的column与json的对应关系：
+    ![](.MySQL_images/44db18f6.png)
++ tree格式
+  <br>tree格式是8.0.16版本之后引入的新格式，主要根据查询的各个部分之间的关系和各部分的执行顺序来描述如何查询。
+  ```mysql
+  explain format = tree select ...
+  ```
++ 可视化输出
+  <br>可视化输出，可以通过MySQL Workbench可视化查看MySQL的执行计划。通过点击Workbench的放大镜图标，即可生成可视化的查询计划。
+  ![](.MySQL_images/a1595c44.png)
+  
+### 2. show warnings的使用
+    在我们使用explain语句查看了某个查询计划后，紧接着还可以使用show warnings语句查看与这个查询的执行计划有关的一些扩展信息，比如：
+    explain select ...;
+    show warnings;
+    通常可以看到show warnings展示出来的信息有三个字段，分别是level，code，message。
+    我们最常见的就是code为1003的信息，当code为1003时，message字段展示的信息类似于查询优化器将我们的查询语句重写后的语句。
+    比如有时会将我们写的外连接优化为内连接，有时会将我们写的子查询优化为连接查询。
 
 
 
