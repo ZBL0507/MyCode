@@ -592,7 +592,9 @@ describe select select_options
   表名
   查询的每一行记录都对应着一个单表
   ```
-  
+ 
+
+ 
 + id <br>
   + 在一个大的查询语句中每个select关键字都对应一个唯一的id
   
@@ -600,5 +602,102 @@ describe select select_options
   + 在所有组中，id值越大，优先级越高，越先执行
   + 关注点：id号每个号码，表示一趟独立的查询，一个sql的查询趟数越少越好
   
-+ 
+
++ select_type
+  + 一条大的查询语句里边可以包含若干个select关键字，每个select关键字代表着一个小的查询语句，而每个select关键字的from子句中都可以包含若干表（这些表用来做连接查询），
+    每一张表都对应着执行计划输出中的一条记录，对于在同一个select关键字中的表来说，它们的id值是相同的。
+    
+  + MySQL为每一个select关键字代表的小查询都定义了一个称之为select_type的属性，意思是我们只要知道了某个小查询的select_type属性，
+    就知道了这个小查询在整个大查询中扮演了一个什么角色，select_type的取值：
+    + SIMPLE： 查询语句中不包含'UNION'或者子查询的查询都算作是'SIMPLE'类型，连接查询也算是'SIMPLE'类型。
+    + PRIMARY： 对于包含'union'或者'union all'或者子查询的大查询来说，它是由几个小查询组成的，
+      其中最左边的查询的'select_type'值就是'PRIMARY'
+    + UNION： 对于包含'union'或者'union all'的大查询来说，它是由几个小查询组成的，其中除了最左边的那个小查询以外，
+      其余的小查询的'select_type'值就是'UNION'
+    + UNION RESULT： mysql选择使用临时表来完成'union'查询的去重工作，针对该临时表的查询的'select_type'就是'UNION RESULT'
+    + SUBQUERY： 如果包含子查询的查询语句不能转为对应的'semi-join'的形式，并且该子查询是不相关子查询。
+      该子查询的第一个'select'关键字代表的那个查询的'select_type'就是'SUBQUERY'
+    + DEPENDENT SUBQUERY： 如果包含子查询的查询语句不能转为对应的'semi-join'的形式，并且该子查询是相关子查询。
+      则该子查询的第一个'select'关键字代表的那个查询的'select_type'就是'DEPENDENT SUBQUERY'
+      <br/>注意的是，select_type为DEPENDENT SUBQUERY的查询可能会被执行多次。
+    + DEPENDENT UNION： 在包含'union'或者'union all'的大查询中，如果各个小查询都依赖于外层查询的话，那除了最左边的那个小查询之外，
+      其余的小查询的'select_type'的值就是'DEPENDENT UNION'
+    + DERIVED： 对于包含'派生表'的查询，该派生表对应的子查询的'select_type'就是'DERIVED'
+    + MATERIALIZED： 当查询优化器在执行包含子查询的语句时，选择将子查询物化之后与外层查询进行连接查询时，
+      该子查询对应的'select_type'属性就是'MATERIALIZED'
   
+ 
++ partitions
+  <br>代表分区表的命中情况，非分区表，该项为NULL。一般情况下我们的查询语句的执行计划的partitions列的值都是NULL
+  
+
++ type
+  + 执行计划的一条记录就代表着mysql对某个表的执行查询时的访问方法，又称"访问类型"，其中的type列就表明了这个访问方法是啥，是较为重要的一个指标。
+    比如，看到type列的值是ref，表明mysql即将使用ref访问方法来执行对s1表的查询。
+  + 访问方法有：system, const, eq_ref, ref, fulltext, ref_or_null, index_merge, unique_subquery, index_subquery, range, index, all.
+  + 详细解释：
+    + system： 当表中'只有一条记录'并且该表使用的存储引擎的统计数据是精确的，比如MyISAM, Memory, 那么对该表的访问方法就是system
+      ```mysql
+      explain select * from t; # 表t中只有一条记录
+      ```
+    + const： 当我们根据主键或者唯一二级索引列与常数进行等值匹配时，对表的访问方法就是const
+      ```mysql
+      explain select * from s1 where id = 1222;
+      explain select * from s1 where key2 = 8080;
+      ```
+    + eq_ref： 在连接查询时，如果被驱动表是通过主键或者唯一二级索引列等值匹配的方式进行访问的（如果该主键或者唯一二级索引是联合索引的话，所有的索引列都必须进行等值比较），
+      则对该被驱动表的访问方法就是eq_ref
+      ```mysql
+      explain select * from s1 inner join s2 on s1.id = s2.id;
+      ```
+    + ref： 当通过普通的二级索引列与常量进行等值匹配时来查询某个表，那么对该表的访问方法就可能是ref
+      ```mysql
+      explain select * from s1 where key1 = 'a';
+      ```
+    + ref_or_null： 当对普通的二级索引进行等值匹配查询，该索引列的值也可以是'NULL'值时，那么对该表的访问方法就可能是ref_or_null
+      ```mysql
+      explain select * from s1 where key1 = 'a' or key1 is null;
+      ```
+    + index_merge： 单表访问方法时在某些场景下可以使用'intersection'，'union'，'sort-union'这三种索引合并的方式来执行查询
+      ```mysql
+      explain select * from s1 where key1 = 'a' or key3 = 'b';
+      ```
+    + unique_subquery： unique_subquery是针对在一些包含'in'子查询的查询语句中，如果查询优化器决定将'in'子查询转换为'exists'子查询，
+      而且子查询可以使用到主键进行等值匹配的话，那么该子查询执行计划的type列的值就是unique_subquery
+      ```mysql
+      explain select * from s1 
+            where key2 in (select id from s2 where s1.key1 = s2.key1) or key3 = 'a';
+      ```
+    + range： 如果使用索引获取某些范围区间的记录，那么就可能使用的到range访问方法
+      ```mysql
+      explain select * from s1 where key1 in ('a', 'b', 'c');
+      explain select * from s1 where key1 > 'a' and key1 < 'b';
+      ```
+    + index： 当我们可以使用索引覆盖，但需要扫描全部当索引记录时，该表的访问方法就是index
+      ```mysql
+      explain select key_part2 from s1 where key_part3 = 'a';
+      ```
+    + all： 全表扫描
+      ```mysql
+      explain select * from s1;
+      ```
+      
++ possible_key和key
+  + possible_key: 可能用到的索引
+  + key: 实际用到的索引
+  
+
++ key_len: 实际使用到的索引长度（即：字节数）
+          <br>帮你检查是否充分的利用上了索引，值越大越好（针对联合索引）。
+
+
+
+
+
+
+
+
+
+
+
+
