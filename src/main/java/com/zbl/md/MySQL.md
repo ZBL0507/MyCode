@@ -689,9 +689,79 @@ describe select select_options
 
 + key_len: 实际使用到的索引长度（即：字节数）
           <br>帮你检查是否充分的利用上了索引，值越大越好（针对联合索引）。
+  
+
++ ref
+  <br>当使用索引列等值查询时，与索引列进行等值匹配的对象信息
 
 
++ rows
+  <br>预估的需要读取的记录条数
+  
 
++ filtered
+  + 某个表经过搜索条件过滤后剩余记录条数的百分比
+  + 如果使用的时索引执行的单表扫描，那么计算时需要估计出满足除使用到对应索引的搜索条件外的其他搜索条件的记录有多少条。
+  + 对于单表查询来说，这个filtered列的值没什么意义，我们更关注在连接查询中驱动表对应的执行计划记录中的filtered值，它决定了被驱动表要执行的次数（即：rows * filtered）
+
+
++ extra：一些额外信息
+  + no tables used： 当查询语句没有from子句时将会提示该信息，比如
+    ```mysql
+    explain select 1;
+    ```
+  + impossible where： 查询语句的where子句永远为false时将会提示该额外信息
+    ```mysql
+    explain select * from s1 where 1 != 1;
+    ```
+  + using where： 当我们使用全表扫描来执行对某个表的查询，并且该语句的where子句中有针对该表的搜索条件时，在extra列中会提示该额外信息
+    <br> 当使用索引访问来执行对某个表的查询，并且该语句的where子句中有除了该索引包含的列之外的其他搜索条件时，在extra列中也会提示该信息
+    ```mysql
+    explain select * from s1 where common_field = 'a';
+    explain select * from s1 where key1 = 'a' and common_field = 'a';
+    ```
+  + select tables optimized away： 当查询列表处有min或者max聚合函数，但是并没有符合where子句中的搜索条件的记录时，将会提示该额外信息
+    ```mysql
+    explain select min(key1) from s1 where key1 = '表中不存在的数据';
+    ```
+  + using index： 当我们的查询列表以及搜索条件中只包含属于某个索引的列，也就是在可以使用覆盖索引的情况下，在extra列将会提示该信息。比如说下面这个查询只需要用到'idx_key1'而不需要回表操作
+    ```mysql
+    explain select key1 from s1 where key1 = 'a';
+    explain select key1, id from s1 where key1 = 'a';
+    ```
+  + using index condition： 有些搜索条件中虽然出现了索引列，但是却不能使用到索引列
+    ```mysql
+    explain select * from s1 where key1 > 'z' and key1 like '%a';
+    ```
+  + using join buffer： 在连接查询执行过程中，当被驱动表不能有效的利用索引加快访问速度的时候，mysql一般会为其分配一块名叫'join buffer'的内存来加快查询速度，也就是我们讲的'基于块的嵌套循环算法'
+    ```mysql
+    explain select * from s1 inner join s2 on s1.common_field = s2.common_field;
+    ```
+  + not exists： 当我们使用左外连接时，如果where子句中包含要求被驱动表的某个列等于'NULL'值的搜索条件，而且那个列又是不允许存储'NULL'值的，那么在该表的执行计划的extra列就会提示该信息
+    ```mysql
+    explain select * from s1 left join s2 on s1.key1 = s2.key1 where s2.id is null ;
+    ```
+  + using union： 如果执行计划的extra列出现列using intersect(...)提示，说明准备使用intersect索引合并的方式执行查询，括号中的'...'表示需要进行索引合并的索引名称<br>
+    如果出现了using union(...)提示，说明准备使用union索引合并的方式执行查询<br>
+    如果出现了using sort_union(...)提示，说明准备使用'sort-union'索引合并的方式执行查询。
+    ```mysql
+    explain select * from s1 where key1 = 'a' or key3 = 'b';
+    ```
+  + zero limit： 当我们的limit子句的参数为0时，表示压根不打算从表中读出任何记录，将会提示该信息。
+    ```mysql
+    explain select * from s1 limit 0;
+    ```
+  + using filesort： 很多情况下排序操作无法使用到索引，只能在内存中（记录较少的时候）或者磁盘中（记录较多的时候）进行排序，mysql把这种在内存中或者磁盘上进行排序的方式统称为文件排序（filesort）<br>
+    如果某个查询需要使用文件排序的方式执行查询，就会在执行计划的extra列中显示'using filesort'
+    ```mysql
+    explain select * from s1 order by common_field limit 10;
+    ```
+  + using temporary： 在许多查询的执行过程中，mysql可能会借助临时表来完成一些功能，比如去重，排序之类的，比如我们在执行许多包含distinct，group by，union等子句的查询过程中，
+    如果不能有效利用索引来完成查询，mysql很有可能寻求通过建立内部的临时表来执行查询。如果查询中使用到了内部的临时表，在执行计划的extra列将会显示using temporary提示
+    ```mysql
+    explain select distinct common_field from s1;
+    explain select common_field, count(*) as amount from s1 group by common_field;
+    ```
 
 
 
