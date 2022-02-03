@@ -818,6 +818,7 @@ describe select select_options
 <br/><br/>
 ## item27： 索引失效的情况
 ### 0. sql语句是否使用索引，和数据库版本，数据量，数据选择度都有关系
+    真正是否适用索引，是优化器基于成本考虑的，以下索引失效的情况都不是绝对的！！！
 ### 1. 注意联合索引的最左匹配原则，否则有可能会导致索引失效
 ### 2. 计算，函数，类型转换（自动或手动）导致索引失效
 ### 3. 范围条件右边的列索引失效
@@ -853,7 +854,41 @@ explain select * from student where age = 30 and classid > 20 and name = 'aaa';
 
 
 
+<br/><br/>
+## item29： 优化分页查询
++ 一般分页查询时，通过创建覆盖索引能够比较好的提高性能。一个常见又非常头疼的问题就是limit 2000000, 10，此时需要的mysql排序前2000010记录，
+  仅仅返回2000000-2000010的记录，其他记录丢弃，查询排序的代价非常大。
+  ```mysql
+  explain select * from student limit 2000000, 10;
+  ```
+  
++ 优化思路一<br>
+  在索引上完成排序分页操作，最后根据主键关联回表查询所需要的其他列内容。
+  ```mysql
+  explain select * from student t, (select id from student order by id limit 2000000, 10) a where t.id = a.id;
+  ```
 
++ 优化思路二<br>
+  该方案适用于主键自增的表，可以把limit查询转换成某个位置的查询
+  ```mysql
+  explain select * from student where id > 2000000 limit 10;
+  ```
+
+
+
+
+<br/><br/>
+## item30： 索引下推
++ Index Condition Pushdown(ICP)是mysql5.6中新特性，是一种在存储引擎层使用索引过滤数据的优化方式。
+  
+
++ 如果没有ICP，存储引擎会遍历索引以定位基表中的行，并将它们返回给mysql服务器，由mysql服务器评估where后面的条件是否保留。
+  
+
++ 启用ICP后，如果部分where条件可以仅使用索引中的列进行筛选，则mysql服务器会把这部分where条件放到存储引擎筛选。
+  然后，存储引擎通过使用索引条目来筛选数据，并且只有在满足这一条件时才从表中读取行。
+  + 好处：icp可以减少存储引擎必须访问基表的次数和mysql服务器必须访问存储引擎的次数。
+  + 但是，icp的加速效果取决于在存储引擎内通过icp筛选掉的数据比例。
 
 
 
