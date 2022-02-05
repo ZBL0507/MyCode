@@ -1022,8 +1022,6 @@ sql标准的四种隔离级别mysql都支持：
   + read commit
   + repeatable read（mysql默认）
   + serializable
-    
-
 
 
 
