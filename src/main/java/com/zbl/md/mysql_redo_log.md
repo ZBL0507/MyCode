@@ -27,6 +27,7 @@
     这里的日志就是redo log。 当发生宕机且数据未刷到磁盘的时候，可以通过redo log来恢复，保证ACID中的D，这就是redo log的作用。
 
 
+<br/><br/>
 ## 2. redo日志的好处、特点
 + 好处
     + redo日志降低了刷盘的频率
@@ -42,6 +43,7 @@
       一直不断的往redo log顺序记录，而bin log不会记录，直到这个事务提交，才会一次写入到bin log文件中。
 
 
+<br/><br/>
 ## 3. redo log的组成
 + redo log可以简单分为以下两个部分：
     + 重做日志的缓冲（redo log buffer），保存在内存中，是易失的。
@@ -52,6 +54,7 @@
 
 
 
+<br/><br/>
 ## 4. redo的整体流程
 以一个更新事务为例，redo log流转过程，如下图所示：
 ![](.mysql_redo_log_images/redo的整体流程.png)
@@ -69,6 +72,7 @@ Write-Ahead Log(预先日志持久化)：在持久化一个数据页之前，先
 ```
 
 
+<br/><br/>
 ## 5. redo log的刷盘策略
 redo log的写入并不是直接写入磁盘的，InnoDB引擎会在写redo log的时候先写redo log buffer，之后以一定的频率
 刷入到真正的redo log file 中。这里的一定频率怎么看待呢？这就是我们要说的刷盘策略。
@@ -86,6 +90,7 @@ redo log的写入并不是直接写入磁盘的，InnoDB引擎会在写redo log�
 + ```设置为2```：表示每次事务提交时都只把redo log buffer 内容写入page cache，不进行同步。由os自己决定什么时候同步到磁盘文件。
 
 
+<br/><br/>
 ## 6. 不同的刷盘策略
 ### 1. innodb_flush_log_at_trx_commit = 1;
 ```mysql
