@@ -47,12 +47,12 @@ mysql把这些为了回滚而记录的这些内容称之为```撤销日志```或
 ## 3. undo的类型
 在InnoDB存储引擎中，undo log分为：
 
-+ insert undo log
++ insert undo log <br>
   insert undo log是指在insert操作中产生的undo log。因为insert操作的记录，只对事务本身可见，对其他事务
   不可见（这是事务隔离性的要求），故该undo log可以在事务提交后直接删除。不需要进行purge操作。
   
 
-+ update undo log
++ update undo log <br>
   update undo log记录的是对delete 和 update操作产生的undo log。该undo log可能需要提供MVCC机制，因此不
   能在事务提交时就进行删除。提交时放入undo log链表，等待purge线程进行最后的删除。
 
@@ -91,8 +91,9 @@ mysql把这些为了回滚而记录的这些内容称之为```撤销日志```或
 对于InnoDB引擎来说，每个行记录除了记录本身的数据之外，还有几个隐藏的列：
 + ```DB_ROW_ID```：如果没有为表显式的定义主键，并且表中也没有定义唯一索引，那么InnoDB会自动为表添加一个row_id的隐藏列作为主键。
 + ```DB_TRX_ID```：每个事务都会分配一个事务ID，当对某条记录发生变更时，就会将这个事务的事务ID写入trx_id中。
-+ ```DB_ROLL_PTR```：回滚指针，本质上就是指向undo log的指针。
++ ```DB_ROLL_PTR```：回滚指针，本质上就是指向undo log的指针。<br>
 ![](.mysql_undo_log_images/三个隐藏列.png)
+<br>
   
 当我们执行insert时：
 ```mysql
@@ -100,8 +101,9 @@ begin ;
 insert into user(name) values ('tom');
 ```
 插入的数据都会生成一条insert undo log，并且数据的回滚指针会指向它。undo log会记录undo log的序号、插入主键的列和值...，
-那么在进行rollback的时候，通过主键直接把对应的数据删除即可。
+那么在进行rollback的时候，通过主键直接把对应的数据删除即可。<br>
 ![](.mysql_undo_log_images/insert时的undo_log.png)
+<br>
 
 当我们执行update时：<br>
 对于更新的操作会产生update undo log，并且会分更新主键的和不更新主键的，假设现在执行：
@@ -109,6 +111,7 @@ insert into user(name) values ('tom');
 update user set name = 'sun' where id = 1;
 ```
 ![](.mysql_undo_log_images/update时的undo_log.png)
+<br>
 这时会把老的记录写入新的undo log，让回滚指针指向新的undo log，它的undo log是1，并且新的undo log会指向老的undo log（undo no=0）
 
 假设现在执行：
@@ -142,7 +145,7 @@ undo log记录的是变更前的日志，并且每个undo log的序号是递增�
   因为insert操作的记录，只对事务本身可见，对其他事务不可见。故该undo log可以在事务提交后直接刪除，不需要进行purge操作。
   
 
-+ 针对于update undo log
++ 针对于update undo log <br>
   该undo log可能需要提供MVCC机制，因此不能在事务提交时就进行删除。提交时放入undo log链表，等待purge线程讲行最后的删除。
 
 
