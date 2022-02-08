@@ -1,7 +1,5 @@
 
 # mysql的自增主键
-![](.mysql_自增主键的问题_images/bcd1dc78.png)
-![](.MySQL_images/表刚创建时.png)
 
 + ```自增主键```可以让主键索引尽量的保持```递增顺序插入```，避免了页分裂，大量的```随机I/O```；
 <br>
@@ -20,25 +18,25 @@ create table tt (
 <br>
 表刚创建时的表情况：<br>   
 
-![](.MySQL_images/表刚创建时.png)
+![](.mysql_自增主键的问题_images/表刚创建时.png)
 <br>
 <br>
 <br>
 
 插入一条记录后的表情况：<br>
-![](.MySQL_images/插入一条记录后的表情况.png)
+![](.mysql_自增主键的问题_images/插入一条记录后的表情况.png)
 <br>
 <br>
 <br>
 
 连续多插入几条记录后的表情况：<br>
-![](.MySQL_images/多插入几条记录后的表情况.png)
+![](.mysql_自增主键的问题_images/多插入几条记录后的表情况.png)
 <br>
 <br>
 <br>
 
 此时，删除主键id为6、7的两条记录，之后表的情况：<br>
-![](.MySQL_images/f4d8fb6d.png)
+![](.mysql_自增主键的问题_images/f4d8fb6d.png)
 <br>
 <br>
 <br>
@@ -48,7 +46,7 @@ create table tt (
 ```mysql
 insert into tt values (6, 5641);
 ```
-![](.MySQL_images/af5df6b1.png)
+![](.mysql_自增主键的问题_images/af5df6b1.png)
 
 请注意，此时```AUTO_INCREMENT=8```，并没有发生变化，说明当我们指定的```主键id```小于```AUTO_INCREMENT```的值的时候，```AUTO_INCREMENT```不会自增。
 <br>
@@ -56,7 +54,7 @@ insert into tt values (6, 5641);
 ```mysql
 insert into tt values (100, 5641);
 ```
-![](.MySQL_images/a3bd02af.png)
+![](.mysql_自增主键的问题_images/a3bd02af.png)
 <br>
 请注意此时表的情况，```AUTO_INCREMENT```的值已经变为```101```，说明当我们指定的```主键id大于AUTO_INCREMENT的值```的时候，```AUTO_INCREMENT```就会在我们
 指定的基础上```自增加一```。
@@ -69,7 +67,7 @@ insert into tt values (100, 5641);
 insert into tt values (null, 567654);
 insert into tt values (null, 56745576);
 ```
-![](.MySQL_images/8b76b134.png)
+![](.mysql_自增主键的问题_images/8b76b134.png)
 <br>
 <br>
 <br>
@@ -78,7 +76,7 @@ insert into tt values (null, 56745576);
 ```mysql
 delete from tt where id in (101, 102);
 ```
-![](.MySQL_images/4b054538.png)
+![](.mysql_自增主键的问题_images/4b054538.png)
 <br>
 此时```AUTO_INCREMENT=103```；
 <br>
@@ -86,7 +84,7 @@ delete from tt where id in (101, 102);
 <br>
 重启之后的表情况：
 <br>
-![](.MySQL_images/c4fc70f3.png)
+![](.mysql_自增主键的问题_images/c4fc70f3.png)
 <br>
 请注意：这个时候 ```AUTO_INCREMENT=101``` 发生了变化，从```103```回退到了```101```
 <br>
