@@ -227,27 +227,29 @@ MySQL的表级锁有两种模式： <br>
   
   2. 意向锁是一种```不与行级锁冲突的表级锁```，这一点非常重要。
   3. 表明“某个事务正在某些行持有了锁或该事务准备去持有锁”
-  <br>
-  <br>
-  意向锁分为两种： <br>
   
-      + **意向共享锁**（intention shared lock，IS）：事务有意向对表中的某些行加**共享锁**（S锁）
-         ```mysql
-         # 事务要获取某些行的S锁，必须先获得表的IS锁。
- 
-         select cloumn from table_name ... lock in share mode ;
-         ```
+<br>
+  
++ 意向锁分为两种： <br>
+
+  + **意向共享锁**（intention shared lock，IS）：事务有意向对表中的某些行加**共享锁**（S锁）
+     ```mysql
+     # 事务要获取某些行的S锁，必须先获得表的IS锁。
+  
+     select cloumn from table_name ... lock in share mode ;
+     ```
       
-      + **意向排他锁**（intention exclusive lock，IX）：事务有意向对表中的某些行加**排他锁**（X锁） 
-         ```mysql
-         # 事务要获取某些行的X锁，必须先获得表的IX锁。
- 
-         select cloumn from table_name ... for update ;
-         ```
+  + **意向排他锁**（intention exclusive lock，IX）：事务有意向对表中的某些行加**排他锁**（X锁） 
+     ```mysql
+     # 事务要获取某些行的X锁，必须先获得表的IX锁。
+  
+     select cloumn from table_name ... for update ;
+     ```
          
-      即：意向锁是由存储引擎```自己维护的```， 用户无法手动操作意向锁，在为数据行加共享/排他锁之前，InnoDB会先获取该数据行```所在数据表的对应意向锁```。
-      <br>
-      <br>
+  即：意向锁是由存储引擎```自己维护的```， 用户无法手动操作意向锁，在为数据行加共享/排他锁之前，InnoDB会先获取该数据行```所在数据表的对应意向锁```。
+  <br>
+
+<br>
       
 + **意向锁要解决的问题**
   <br>
