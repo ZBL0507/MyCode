@@ -2,7 +2,7 @@
 ## 解脱之味不独饮,&emsp;开心之果不独证  
 
 ## 简介
-`MyCode`是作者自己平时的学习积累，里面包含了各种基本算法，`LeetCode`刷题记录，`Java`基础知识点和各种笔记等.  
+`MyCode`是作者自己平时的学习积累，里面包含了数据结构与算法Java代码实现，`LeetCode`刷题记录，`Java`基础知识点和各种笔记等.  
 
 ## 需要
 * 基于 `JDK1.8`
@@ -60,9 +60,5 @@ $ cd MyCode
   4. [mysql_undo_log](./src/main/java/com/zbl/md/mysql_undo_log.md)  
   4. [mysql_自增主键的问题](./src/main/java/com/zbl/md/mysql_自增主键的问题.md)  
 
-
-
-
-  
 
 
