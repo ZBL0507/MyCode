@@ -30,25 +30,26 @@ $ cd MyCode
 `com`   
 &emsp;`zbl`  
 &emsp;&emsp;`algorithm` ------------------------------------------------ [`算法`](./src/main/java/com/zbl/algorithm/)   
-&emsp;&emsp;&emsp;`find`  --------------------------------------------------- `查找算法`  
-&emsp;&emsp;&emsp;`introduction`  ------------------------------------------`《算法导论》中相关算法java代码实现`  
-&emsp;&emsp;&emsp;`leetcode`  -----------------------------------------------`LeetCode算法题目`  
-&emsp;&emsp;&emsp;`sort`  ----------------------------------------------------`排序算法`  
+&emsp;&emsp;&emsp;`find`  --------------------------------------------------- [`查找算法`](./src/main/java/com/zbl/algorithm/find/)    
+&emsp;&emsp;&emsp;`introduction`  ------------------------------------------[`《算法导论》中相关算法java代码实现`](./src/main/java/com/zbl/algorithm/introduction/)     
+&emsp;&emsp;&emsp;`leetcode`  -----------------------------------------------[`LeetCode算法题目`](./src/main/java/com/zbl/algorithm/leetcode/)       
+&emsp;&emsp;&emsp;`sort`  ----------------------------------------------------[`排序算法`](./src/main/java/com/zbl/algorithm/sort/)     
 &emsp;&emsp;`circular`     
-&emsp;&emsp;&emsp;`dependency`  ---------------------------------------------`Spring循环依赖`   
-&emsp;&emsp;`concurrent`  -----------------------------------------------`java并发测试小程序`   
+&emsp;&emsp;&emsp;`dependency`  ---------------------------------------------[`Spring循环依赖`](./src/main/java/com/zbl/circular/dependency/)      
+&emsp;&emsp;`concurrent`  -----------------------------------------------[`java并发测试小程序`](./src/main/java/com/zbl/concurrent/)      
 &emsp;&emsp;`ds`   
-&emsp;&emsp;&emsp;`container`  ----------------------------------------------`容器`    
-&emsp;&emsp;&emsp;`structure`  ----------------------------------------------`数据结构`     
-&emsp;&emsp;`testgc`  ----------------------------------------------------`GC测试小程序`    
-&emsp;&emsp;`text`  ------------------------------------------------------`各种笔记记录`      
-&emsp;&emsp;&emsp;`source_code`  --------------------------------------------`一些源码`      
-&emsp;&emsp;`util`  -------------------------------------------------------`工具包`      
+&emsp;&emsp;&emsp;`container`  ----------------------------------------------[`容器`](./src/main/java/com/zbl/ds/container)     
+&emsp;&emsp;&emsp;`structure`  ----------------------------------------------[`数据结构`](./src/main/java/com/zbl/ds/structure)     
+&emsp;&emsp;`testgc`  ----------------------------------------------------[`GC测试小程序`](./src/main/java/com/zbl/testgc)     
+&emsp;&emsp;`text`  ------------------------------------------------------[`各种笔记记录`](./src/main/java/com/zbl/text)      
+&emsp;&emsp;`md`  --------------------------------------------------------[`md格式的笔记`](./src/main/java/com/zbl/md)      
+&emsp;&emsp;&emsp;`source_code`  --------------------------------------------[`一些源码`](./src/main/java/com/zbl/text/source_code)      
+&emsp;&emsp;`util`  -------------------------------------------------------[`工具包`](./src/main/java/com/zbl/util)     
 
 
 
 
 
- [超链接文字]( www.baidu.com) 。    
+  
 
 
