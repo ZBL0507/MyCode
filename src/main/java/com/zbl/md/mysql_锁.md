@@ -764,7 +764,8 @@ SELECT * FROM user LOCK IN SHARE MODE;
    <br>
    在InnoDB存储引擎中，LOCK_IS, LOCK_IX, LOCK_AUTO_INC都算是表级锁的模式，LOCK_S和LOCK_X既可以算是表级锁的模式，也可以是行级锁的模式。
    <br>    
-   <br>    
+   <br>
+       
    + 锁的类型（lock_type），占用第5~8位，不过现阶段只有第5位和第6位被使用：
      + LOCK_TABLE（十进制的16） ，也就是当第5个比特位置为1时，表示表级锁。
      + LOCK_REC（十进制的32） ，也就是当第6个比特位置为1时，表示行级锁。
@@ -777,7 +778,7 @@ SELECT * FROM user LOCK IN SHARE MODE;
      + LOCK_INSERT-INTENTION（十进制的 2048）：也就是当第12个比特位置为1时，表示插入意向锁。其他的类型：还有一些不常用的类型我们就不多说了。
      <br>
      <br>
-   + is_waiting 属性呢？基于内存空间的节省，所以把 is_waiting 属性放到了 type_mode 这个32位的数字中:
+   + is_waiting 属性呢？基于内存空间的节省，所以把 is_waiting 属性放到了 type_mode 这个32位的数字中: <br> 
      + LOCK-WAIT（十进制的256） ：当第9个比特位置为1时，表示is_waiting 为 true，也就是当前事务尚末获取到锁，处在等待状态；当这个比特位为0时，
        表示is_waiting 为false ，也就是当前事务获取锁成功。
        
