@@ -124,7 +124,7 @@ InnoDB中，MVCC 是通过 Undo Log + Read View进行数据读取，Undo Log 保
 而 Read View 规则帮我们判断当前版本的数据是否可见。
 ```
 在隔离级别为读已提交 (Read Committed）时, 一个事务中的每一次 SELECT 查询都会重新获取一次 Read View. <br>
-![](.mysql_mvcc_images/8caf5d6b.png)
+![](../.mysql_mvcc_images/8caf5d6b.png)
 <br>
 ```text
 注意：此时同样的查询语句都会重新获取一次Read View，这时如果Read View不同，就可能产生不可重复读或者幻读的情况。
@@ -132,7 +132,7 @@ InnoDB中，MVCC 是通过 Undo Log + Read View进行数据读取，Undo Log 保
 <br>
 
 当隔离级别为可重复读的时候，就避免了不可重复读，这是因为一个事务只在第一次 SELECT 的时候会获取一次 Read View， 而后面所有的 SELECT 都会复用这个 Read View. <br>
-![](.mysql_mvcc_images/51a87f7e.png)
+![](../.mysql_mvcc_images/51a87f7e.png)
 <br>
 
 
@@ -141,7 +141,7 @@ InnoDB中，MVCC 是通过 Undo Log + Read View进行数据读取，Undo Log 保
 
 ## 4. 举例说明
 假设现在student表中只有一条由 ```事务id``` 为```8```的事务插入的一条记录： <br>
-![](.mysql_mvcc_images/7203f62a.png)
+![](../.mysql_mvcc_images/7203f62a.png)
 <br>
 MVCC 只能在 READ COMMITTED 和 REPEATABLE READ 两个隔离级别下工作。接下来看一下 ```READ COMMITTED``` 和 ```REPEATABLE READ``` 所谓的生成ReadView的时机不同到底不同在哪里。
 
@@ -165,7 +165,7 @@ BEGIN;
      所以我们才在事务20中更新一些别的表的记录，目的是让它分配事务id.
 ```
 此刻，表 student 中```id```为```1```的记录得到的版本链表如下所示： <br>
-![](.mysql_mvcc_images/ea7cbb20.png)
+![](../.mysql_mvcc_images/ea7cbb20.png)
 <br>
 假设现在有一个使用 ```READ COMMITTED``` 隔离级别的事务开始执行：
 ```mysql
@@ -210,7 +210,7 @@ UPDATE student SET name= "钱七" WHERE id = 1;
 UPDATE student SET name= "宋八" WHERE id = 1;
 ```
 此刻，表student中 ```id``` 为 ```1``` 的记录的版本链就长这样： <br>
-![](.mysql_mvcc_images/1f6f8f68.png)
+![](../.mysql_mvcc_images/1f6f8f68.png)
 <br>
 然后再到刚才使用 ```READ COMMITTED``` 隔离级别的事务中继续查找这个 ```id``` 为 ```1``` 的记录，如下：<br>
 ```mysql
@@ -253,7 +253,7 @@ BEGIN;
 # ...
 ```
 此刻，表 student 中 id 为 1 的记录得到的版本链表如下所示： <br>
-![](.mysql_mvcc_images/cc1305ee.png)
+![](../.mysql_mvcc_images/cc1305ee.png)
 <br>
 假设现在有一个使用 ```REPEATABLE READ``` 隔离级别的事务开始执行：
 ```mysql
@@ -301,7 +301,7 @@ UPDATE student SET name = "钱七" WHERE id = 1;
 UPDATE student SET name = "宋八" WHERE id = 1;
 ```
 此刻，表 student 中 id 为 1 的记录的版本链长这样：<br>
-![](.mysql_mvcc_images/0b8b1c8f.png)
+![](../.mysql_mvcc_images/0b8b1c8f.png)
 <br>
 然后再到刚才使用 ```REPEATABLE READ``` 隔离级别的事务中继续查找这个 ```id``` 为 ```1``` 的记录，如下：
 ```mysql
@@ -338,7 +338,7 @@ SELECT2 的执行过程如下： <br>
 
 ### 4.3 如何解决幻读
 假设现在表 student 中只有一条数据，数据内容中，主键 id=1，隐藏的trx_id=10，它的undo log 如下图所示。 <br>
-![](.mysql_mvcc_images/7560ff9a.png)
+![](../.mysql_mvcc_images/7560ff9a.png)
 <br>
 假设现在有事务A 和 事务B 并发执行，```事务A```的事务id 为 20，```事务B```的事务id 为 ```30```。
 
@@ -362,7 +362,7 @@ insert into student (id, name) values (2, '李四');
 insert into student (id,name ) values (3, '王五');
 ```
 此时表student 中就有三条数据了，对应的undo 如下图所示： <br>
-![](.mysql_mvcc_images/a2bd3072.png)
+![](../.mysql_mvcc_images/a2bd3072.png)
 <br>
 步骤3：接着 事务A 开启第二次查询，根据可重复读隔离级别的规则，此时 事务A 并不会再重新生成 ReadView.
 此时表 student 中的 3 条数据都满足 where id>=1 的条件，因此会先查出来。然后根据 ReadView 机制，判断每条数据是不是都可以被 事务A 看到.
@@ -375,7 +375,7 @@ insert into student (id,name ) values (3, '王五');
 
 
 + 同理，id=3 的这条数据，trx_id 也为 30，因此也不能被 事务A 看见。 <br>
-![](.mysql_mvcc_images/c5dbc6c7.png)
+![](../.mysql_mvcc_images/c5dbc6c7.png)
 <br>
   
 结论：最终 事务A 的第二次查询，只能查询出 id=1 的这条数据。这和 事务A 的第一次查询的结果是一样的，因此没有出现幻读现象，
