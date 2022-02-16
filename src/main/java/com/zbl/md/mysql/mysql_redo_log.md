@@ -57,7 +57,7 @@
 <br/><br/>
 ## 4. redo的整体流程
 以一个更新事务为例，redo log流转过程，如下图所示：
-![](.mysql_redo_log_images/redo的整体流程.png)
+![](../.mysql_redo_log_images/redo的整体流程.png)
 ```text
 第1步：先将原始数据从磁盘中读入内存中，修改数据的内存拷贝
 
@@ -76,7 +76,7 @@ Write-Ahead Log(预先日志持久化)：在持久化一个数据页之前，先
 ## 5. redo log的刷盘策略
 redo log的写入并不是直接写入磁盘的，InnoDB引擎会在写redo log的时候先写redo log buffer，之后以一定的频率
 刷入到真正的redo log file 中。这里的一定频率怎么看待呢？这就是我们要说的刷盘策略。
-![](.mysql_redo_log_images/redo_log刷盘策略.png)
+![](../.mysql_redo_log_images/redo_log刷盘策略.png)
 <br>
 注意，redo log buffer 刷盘到redo log file的过程并不是真正的刷到磁盘中去，只是刷入到文件系统缓存 (page cache）中去（这是现代操作系统为了提高文件写入效率做的一个优化），
 真正的写入会交给系统自己来决定（比如page cache足够大了）。那么对于InnoDB来说就存在一个问题，如果交给系统来同步，同样如果系统宕机，那么数据也丢失了（虽然整个系统宕机的概率还是比较小的）。
@@ -96,7 +96,7 @@ redo log的写入并不是直接写入磁盘的，InnoDB引擎会在写redo log�
 ```mysql
 set innodb_flush_log_at_trx_commit = 1;
 ```
-![](.mysql_redo_log_images/设置为1时的刷盘策略.png)
+![](../.mysql_redo_log_images/设置为1时的刷盘策略.png)
 ```text
 小结：innodb_flush_log_at_trx_commit=1
 
@@ -113,7 +113,7 @@ set innodb_flush_log_at_trx_commit = 1;
 ````mysql
 set innodb_flush_log_at_trx_commit = 2;
 ````
-![](.mysql_redo_log_images/设置为2时的刷盘策略.png)
+![](../.mysql_redo_log_images/设置为2时的刷盘策略.png)
 ```text
 小结 innodb_flush_log_at_trx_commit=2
 
@@ -128,7 +128,7 @@ set innodb_flush_log_at_trx_commit = 2;
 ````mysql
 set innodb_flush_log_at_trx_commit = 0;
 ````
-![](.mysql_redo_log_images/设置为0时的刷盘策略.png)
+![](../.mysql_redo_log_images/设置为0时的刷盘策略.png)
 ```text
 小结：innodb_flush_log_at_trx_commit=0
 

@@ -92,7 +92,7 @@ mysql把这些为了回滚而记录的这些内容称之为```撤销日志```或
 + ```DB_ROW_ID```：如果没有为表显式的定义主键，并且表中也没有定义唯一索引，那么InnoDB会自动为表添加一个row_id的隐藏列作为主键。
 + ```DB_TRX_ID```：每个事务都会分配一个事务ID，当对某条记录发生变更时，就会将这个事务的事务ID写入trx_id中。
 + ```DB_ROLL_PTR```：回滚指针，本质上就是指向undo log的指针。<br>
-![](.mysql_undo_log_images/三个隐藏列.png)
+![](../.mysql_undo_log_images/三个隐藏列.png)
 <br>
   
 当我们执行insert时：
@@ -102,7 +102,7 @@ insert into user(name) values ('tom');
 ```
 插入的数据都会生成一条insert undo log，并且数据的回滚指针会指向它。undo log会记录undo log的序号、插入主键的列和值...，
 那么在进行rollback的时候，通过主键直接把对应的数据删除即可。<br>
-![](.mysql_undo_log_images/insert时的undo_log.png)
+![](../.mysql_undo_log_images/insert时的undo_log.png)
 <br>
 
 当我们执行update时：<br>
@@ -110,7 +110,7 @@ insert into user(name) values ('tom');
 ```mysql
 update user set name = 'sun' where id = 1;
 ```
-![](.mysql_undo_log_images/update时的undo_log.png)
+![](../.mysql_undo_log_images/update时的undo_log.png)
 <br>
 这时会把老的记录写入新的undo log，让回滚指针指向新的undo log，它的undo log是1，并且新的undo log会指向老的undo log（undo no=0）
 
@@ -118,7 +118,7 @@ update user set name = 'sun' where id = 1;
 ```mysql
 update user set id = 2 where id = 1;
 ```
-![](.mysql_undo_log_images/更新主键时的undo_log.png)
+![](../.mysql_undo_log_images/更新主键时的undo_log.png)
 <br>
 对于更新主键的操作，会先把原来的数据deletemark标识打开，这时并没有真正的删除数据，真正的删除会交给清理线程去判断，
 然后在后面插入一条新的数据，新的数据也会产生undo log，并且undo log的序号会递增。
