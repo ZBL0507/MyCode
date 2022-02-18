@@ -56,18 +56,51 @@ Redis的set是string类型的无序集合。它底层其实是一个value为null
 
 **数据结构：**
 
+set数据结构是dict字典，字典是用哈希表实现的。
+
+java中的HashSet的内部实现使用的是HashMap，只不过所有的value都指向同一个对象。<br>
+Redis的set结构也是一样，它的内容也使用hash结构，所有的value都指向同一个内部值。
+
+
+
+<br>
+<br>
+<br>
+
+## 4. 哈希（hash）
+redis hash是一个键值对集合。
+
+redis hash 是一个string类型的field和value的映射表，hash特别适合用于存储对象。
+
+
+**数据结构：**
+
+hash类型对应的数据结构是两种：ziplist（压缩列表），hashtable（哈希表）。当field-value长度较短且个数较少时，使用ziplist，否则使用hashtable。
 
 
 
 
+<br>
+<br>
+<br>
+
+## 5. 有序集合Zset（sorted set）
+redis 有序集合zset与普通集合set非常相似，是一个没有重复元素的字符串集合。
+
+不同之处是有序集合的每个成员都关联了一个评分（score），这个评分（score）被用来按照从低到高的方式排序集合中的成员。集合的成员是唯一的，但是评分是可以重复的。
+
+访问有序集合的中间元素也是非常快的，因此你能够使用有序集合作为一个没有重复成员的智能列表。
 
 
+**数据结构：**
 
+SortedSet(zset)是redis提供的一个非常特别的数据结构，一方面它等价于java的数据结构Map<String, Double>，可以给每个元素value赋予一个权重score，
+另一方面它又类似于TreeSet, 内部的元素按照权重score进行排序，可以得到每个元素的名次，还可以通过score的范围来获取元素的列表。
 
+zset底层使用了两个数据结构
 
-
-
-
+1. hash，hash的作用就是关联value和权重score，保障元素value的唯一性，可以通过元素value找到相应的score值。
+2. 跳跃表，跳跃表的目的在于给元素value排序，根据score的范围获取元素列表。
 
 
 
