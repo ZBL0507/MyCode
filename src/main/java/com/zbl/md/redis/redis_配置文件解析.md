@@ -91,6 +91,14 @@
 <br>
 <br>
 
+## 12. rdb持久化的配置，文件名
+![](.redis_配置文件解析_images/a38fc56a.png) <br>
+
+当redis无法写入硬盘时，直接关掉redis的写操作。推荐yes <br>
+![](.redis_配置文件解析_images/fab0b313.png)
+
+
+
 
 
 
