@@ -24,3 +24,17 @@ List<StudentInfo> studentsSortName = studentList
                                                 )
                                         .collect(Collectors.toList());
 ```
+
+
+
+
+<br>
+<br>
+<br>
+
+## 2. 求和
+```java
+value.stream().reduce(0, Integer::sum);
+
+value.stream().mapToInt(e -> e).reduce(0, Integer::sum);
+```
