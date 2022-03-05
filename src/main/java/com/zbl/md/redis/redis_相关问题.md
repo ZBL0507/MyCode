@@ -52,6 +52,9 @@
 <br>
 <br>
 
+## 5. redis的内存淘汰策略
+![](.redis_相关问题_images/8571ed81.png)
+
 
 
 
