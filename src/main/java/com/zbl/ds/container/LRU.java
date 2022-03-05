@@ -4,12 +4,16 @@ import com.zbl.ds.structure.LRUStructure;
 
 
 /**
+ * 实现效率低下，不再推荐使用！！！
+ * 推荐使用{@link LRUCache} 和 {@link LRUCacheV2}代替
+ *
  * @author zbl
  * @version 1.0
  * @since 2022/1/17 14:43
  * <p>
  * 最近最少使用
  */
+@Deprecated
 public class LRU {
 
     /**
