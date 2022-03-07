@@ -15,6 +15,32 @@ import java.util.UUID;
 public class TestGC {
     public static void main(String[] args) throws InterruptedException {
 
+    }
+
+    private static void test003() {
+        //java.lang.OutOfMemoryError: unable to create new native thread
+        int count = 0;
+        try {
+            for (int i = 0;  ; i++) {
+                int finalI = i;
+                count = finalI;
+                new Thread(() -> {
+                    try {
+                        //System.out.println("线程：" + finalI);
+                        Thread.sleep(Integer.MAX_VALUE);
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        } finally {
+            System.out.println("此时: " + count);
+        }
+    }
+
+    private static void test002() {
         //vm参数 -XX:+PrintGCDetails -Xms10m -Xmx10m  -XX:+UseG1GC
         ArrayList<String> list = new ArrayList<>();
         try {
