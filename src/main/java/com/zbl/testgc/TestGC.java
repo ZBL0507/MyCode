@@ -1,6 +1,8 @@
 package com.zbl.testgc;
 
 
+import org.apache.tomcat.jni.User;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -14,7 +16,17 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public class TestGC {
     public static void main(String[] args) throws InterruptedException {
+    }
 
+    private static void test004() {
+        //-Xms100m
+        //-Xmx100m
+        //-XX:+HeapDumpOnOutOfMemoryError
+        //-XX:HeapDumpPath=e:\heapdump.hprof
+        ArrayList<User> list = new ArrayList<>();
+        while (true) {
+            list.add(new User());
+        }
     }
 
     private static void test003() {
