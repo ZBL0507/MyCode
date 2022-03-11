@@ -1,4 +1,4 @@
-package com.zbl.algorithm.practice;
+package com.zbl.algorithm.practice._02;
 
 import java.util.*;
 import java.util.stream.Collectors;
