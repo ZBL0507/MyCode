@@ -13,6 +13,23 @@ import java.util.Map;
  */
 public class HashMapTest {
 
+    static class User {
+        @Override
+        public int hashCode() {
+            return 808908;
+        }
+    }
+
+    @Test
+    public void testHashMap() {
+        HashMap<User, User> map = new HashMap<>(128);
+        for (int i = 0; i < 100; i++) {
+            User user = new User();
+            map.put(user, user);
+        }
+    }
+
+
     @Test
     public void testPut() {
         /*
