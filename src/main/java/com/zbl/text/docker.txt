@@ -1,3 +1,0 @@
-【docker基本概念】
-    Images: An image is a read-only template with instructions for creating a Docker container.
-    Containers: A container is a runnable instance of an image.
