@@ -48,7 +48,7 @@ $ cd MyCode
 &emsp;&emsp;`testgc`  ----------------------------------------------------[`GC测试小程序`](./src/main/java/com/zbl/testgc)     
 &emsp;&emsp;`text`  ------------------------------------------------------[`各种笔记记录`](./src/main/java/com/zbl/text)      
 &emsp;&emsp;`md`  --------------------------------------------------------[`md格式的笔记`](./src/main/java/com/zbl/md)      
-&emsp;&emsp;&emsp;`source_code`  --------------------------------------------[`一些源码`](./src/main/java/com/zbl/text/source_code)      
+&emsp;&emsp;&emsp;`source_code`  --------------------------------------------[`一些源码`](src/main/java/com/zbl/source_code)      
 &emsp;&emsp;`util`  -------------------------------------------------------[`工具包`](./src/main/java/com/zbl/util)     
 
 
