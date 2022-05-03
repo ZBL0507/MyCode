@@ -5,7 +5,7 @@ import java.util.Random;
 @SuppressWarnings("unused")
 public class RandomUtils {
 
-    private static Random random = new Random();
+    private static final Random random = new Random();
 
     /**
      * 生成一个在 [low, hig] 范围上的随机数
