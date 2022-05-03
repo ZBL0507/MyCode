@@ -21,7 +21,6 @@ public class MainApplication {
             System.out.println(gcBean.getName());
         }
 
-
         ConfigurableApplicationContext context = SpringApplication.run(MainApplication.class, args);
 
         A a = context.getBean("a", A.class);
