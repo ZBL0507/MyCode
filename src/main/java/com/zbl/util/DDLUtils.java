@@ -1,10 +1,14 @@
 package com.zbl.util;
 
 import cn.hutool.core.io.file.FileReader;
+import cn.hutool.core.io.file.FileWriter;
+import cn.hutool.core.text.csv.CsvUtil;
+import cn.hutool.core.text.csv.CsvWriter;
 import cn.hutool.core.util.StrUtil;
 import com.zbl.dto.FieldDTO;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,16 +31,41 @@ public class DDLUtils {
             "char", "varchar", "blob", "text"
     );
 
-    public static void main(String[] args) {
-        System.out.println("\\s" + "lkjlj");
-        File file = new File("/Users/zhaobaoliang/Desktop/aaaa.txt");
+    public static void main(String[] args) throws IOException {
+
         String fileName = "/Users/zhaobaoliang/Desktop/aaaa.txt";
-        Charset charset = Charset.defaultCharset();
+        String outputFileName = "/Users/zhaobaoliang/Desktop/bbb.csv";
 
-        getTableField(fileName, charset);
-
+        List<FieldDTO> tableField = getTableField(fileName);
+        writeCSV(tableField, outputFileName);
     }
 
+
+    public static List<FieldDTO> getTableField(String ddlFilePath) {
+        return getTableField(ddlFilePath, Charset.defaultCharset());
+    }
+
+    /**
+     * 给定一个创建表的ddl文本文件的绝对路径地址，从而读取文件，解析出字段属性
+     * 注意：必须要传入创建表的ddl文本文件绝对路径，否则将产生未定义的错误
+     *
+     * @param ddlFilePath 创建表的ddl文本文件的绝对路径地址
+     * @param charset     字符编码集
+     * @return 所有字段属性的集合
+     */
+    public static List<FieldDTO> getTableField(String ddlFilePath, Charset charset) {
+        File ddlFile = new File(ddlFilePath);
+        return getTableField(ddlFile, charset);
+    }
+
+    /**
+     * 从一个创建表的ddl文本文件中解析出字段属性
+     * 注意：必须要传入创建表的ddl文本文件，否则将产生未定义的错误
+     *
+     * @param ddlFile 创建表的ddl文本文件
+     * @param charset 字符编码集
+     * @return 所有字段属性的集合
+     */
     public static List<FieldDTO> getTableField(File ddlFile, Charset charset) {
         FileReader fileReader = new FileReader(ddlFile, charset);
         List<String> lineList = fileReader.readLines();
@@ -72,17 +101,23 @@ public class DDLUtils {
                 }
             }
 
-            System.out.println(fieldComment);
+            //注释处理  注释, -> 注释
+            if (fieldComment.endsWith(",")) {
+                fieldComment = fieldComment.substring(0, fieldComment.length() - 1);
+            }
+            //注释处理  '注释' -> 注释
+            if (fieldComment.startsWith("'")) {
+                fieldComment = fieldComment.substring(1);
+                if (fieldComment.endsWith("'")) {
+                    fieldComment = fieldComment.substring(0, fieldComment.length() - 1);
+                }
+            }
+
             fieldDTO.setFieldComment(fieldComment);
             fieldDTOList.add(fieldDTO);
         }
 
         return fieldDTOList;
-    }
-
-    public static List<FieldDTO> getTableField(String ddlFilePath, Charset charset) {
-        File ddlFile = new File(ddlFilePath);
-        return getTableField(ddlFile, charset);
     }
 
     /**
@@ -101,5 +136,31 @@ public class DDLUtils {
         }
 
         return false;
+    }
+
+    /**
+     * 将一个java bean集合写入到CSV文件中
+     *
+     * @param beanList       java bean集合
+     * @param outPutFilePath 输出文件路径
+     * @param <T>            bean类型
+     */
+    public static <T> void writeCSV(List<T> beanList, String outPutFilePath) throws IOException {
+        FileWriter fileWriter = new FileWriter(outPutFilePath);
+        writeCSV(beanList, outPutFilePath, Charset.defaultCharset());
+    }
+
+    /**
+     * 将一个java bean集合写入到CSV文件中
+     *
+     * @param beanList       java bean集合
+     * @param outPutFilePath 输出文件路径
+     * @param charset        字符编码集
+     * @param <T>            bean类型
+     */
+    public static <T> void writeCSV(List<T> beanList, String outPutFilePath, Charset charset) throws IOException {
+        java.io.FileWriter fileWriter = new java.io.FileWriter(outPutFilePath, charset);
+        CsvWriter writer = CsvUtil.getWriter(fileWriter);
+        writer.writeBeans(beanList);
     }
 }
